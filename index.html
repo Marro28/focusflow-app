@@ -199,13 +199,13 @@
 
             <div class="timer-display">
                 <div class="timer-phase" id="timer-phase">Sessione di lavoro</div>
-                <div class="timer-visual">
-                    <svg class="timer-ring" width="300" height="300">
-                        <circle class="timer-ring-bg" cx="150" cy="150" r="140" />
-                        <circle class="timer-ring-progress" id="timer-ring-progress" cx="150" cy="150" r="140" />
-                    </svg>
-                    <div class="timer-countdown" id="timer-countdown">25:00</div>
-                </div>
+                
+                <!-- POMODORO CHE CRESCE -->
+                <div class="tomato-container"></div>
+                
+                <!-- Timer countdown sotto la pianta -->
+                <div class="timer-countdown" id="timer-countdown" style="position: relative; margin-top: 1rem;">25:00</div>
+                
                 <div class="timer-pomodoros">
                     <span id="pomodoro-count">0</span> 🍅 completati oggi
                 </div>
@@ -264,8 +264,242 @@
         </div>
     </div>
 
-    <!-- Audio players (nascosti) -->
-    <audio id="audio-player" loop></audio>
+    <!-- SVG Assets (nascosti ma caricati) -->
+    <div style="position: absolute; width: 0; height: 0; overflow: hidden;">
+        <!-- TOMATO GROWTH - STUDENT VERSION -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+          <defs>
+            <!-- FASE 1: SEMINA -->
+            <g id="student-phase-1">
+              <rect x="50" y="400" width="300" height="80" fill="#8B4513" rx="5"/>
+              <ellipse cx="200" cy="430" rx="15" ry="10" fill="#654321"/>
+              <line x1="180" y1="410" x2="180" y2="380" stroke="#666" stroke-width="3"/>
+              <path d="M170,410 L180,380 L190,410 Z" fill="#888"/>
+            </g>
+            
+            <!-- FASE 2: INNAFFIATURA -->
+            <g id="student-phase-2">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <ellipse cx="200" cy="430" rx="15" ry="10" fill="#543210"/>
+              <ellipse cx="190" cy="400" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+              <ellipse cx="200" cy="405" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+              <ellipse cx="210" cy="400" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+              <path d="M240,360 L260,360 L260,380 L240,380 Z" fill="#4ECDC4"/>
+              <circle cx="250" cy="370" r="15" fill="#4ECDC4"/>
+              <path d="M235,375 L220,385 L220,395 L235,385 Z" fill="#4ECDC4"/>
+            </g>
+            
+            <!-- FASE 3: GERMOGLIO -->
+            <g id="student-phase-3">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="380" stroke="#228B22" stroke-width="4"/>
+              <ellipse cx="185" cy="390" rx="12" ry="8" fill="#32CD32" transform="rotate(-30 185 390)"/>
+              <ellipse cx="215" cy="390" rx="12" ry="8" fill="#32CD32" transform="rotate(30 215 390)"/>
+            </g>
+            
+            <!-- FASE 4: CRESCITA FOGLIE -->
+            <g id="student-phase-4">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="320" stroke="#228B22" stroke-width="5"/>
+              <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+              <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+              <ellipse cx="175" cy="350" rx="15" ry="10" fill="#228B22" transform="rotate(-35 175 350)"/>
+              <ellipse cx="225" cy="350" rx="15" ry="10" fill="#228B22" transform="rotate(35 225 350)"/>
+              <ellipse cx="180" cy="325" rx="12" ry="8" fill="#32CD32" transform="rotate(-30 180 325)"/>
+              <ellipse cx="220" cy="325" rx="12" ry="8" fill="#32CD32" transform="rotate(30 220 325)"/>
+            </g>
+            
+            <!-- FASE 5: FIORITURA -->
+            <g id="student-phase-5">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="280" stroke="#228B22" stroke-width="5"/>
+              <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+              <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+              <ellipse cx="175" cy="340" rx="15" ry="10" fill="#228B22" transform="rotate(-35 175 340)"/>
+              <ellipse cx="225" cy="340" rx="15" ry="10" fill="#228B22" transform="rotate(35 225 340)"/>
+              <circle cx="200" cy="280" r="8" fill="#FFD700"/>
+              <circle cx="192" cy="275" r="6" fill="#FFEC8B"/>
+              <circle cx="208" cy="275" r="6" fill="#FFEC8B"/>
+              <circle cx="192" cy="285" r="6" fill="#FFEC8B"/>
+              <circle cx="208" cy="285" r="6" fill="#FFEC8B"/>
+              <circle cx="200" cy="280" r="4" fill="#FF8C00"/>
+            </g>
+            
+            <!-- FASE 6: POMODORO VERDE -->
+            <g id="student-phase-6">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="260" stroke="#228B22" stroke-width="5"/>
+              <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+              <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+              <ellipse cx="200" cy="250" rx="35" ry="40" fill="#90EE90"/>
+              <ellipse cx="200" cy="240" rx="30" ry="25" fill="#7CCD7C"/>
+              <line x1="200" y1="210" x2="200" y2="230" stroke="#228B22" stroke-width="3"/>
+              <path d="M190,215 Q200,205 210,215" fill="none" stroke="#32CD32" stroke-width="2"/>
+            </g>
+            
+            <!-- FASE 7: POMODORO ROSSO -->
+            <g id="student-phase-7">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="260" stroke="#228B22" stroke-width="5"/>
+              <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+              <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+              <ellipse cx="200" cy="250" rx="40" ry="45" fill="#FF6347"/>
+              <ellipse cx="200" cy="240" rx="35" ry="30" fill="#FF4500"/>
+              <ellipse cx="185" cy="235" rx="12" ry="15" fill="#FF7F50" opacity="0.6"/>
+              <line x1="200" y1="205" x2="200" y2="225" stroke="#228B22" stroke-width="4"/>
+              <path d="M185,210 Q200,200 215,210" fill="none" stroke="#32CD32" stroke-width="3"/>
+              <path d="M190,212 L200,205 L210,212" fill="#32CD32"/>
+            </g>
+            
+            <!-- FASE 8: RACCOLTA -->
+            <g id="student-phase-8">
+              <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+              <line x1="200" y1="430" x2="200" y2="280" stroke="#228B22" stroke-width="5"/>
+              <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+              <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+              <ellipse cx="280" cy="300" rx="20" ry="25" fill="#FFD700"/>
+              <rect x="270" y="320" width="20" height="40" fill="#FFD700" rx="10"/>
+              <ellipse cx="280" cy="290" rx="25" ry="28" fill="#FF6347"/>
+              <ellipse cx="280" cy="283" rx="20" ry="18" fill="#FF4500"/>
+            </g>
+          </defs>
+        </svg>
+
+        <!-- TOMATO GROWTH - PROFESSIONAL VERSION -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+          <defs>
+            <g id="pro-phase-1">
+              <rect x="100" y="420" width="200" height="50" fill="#2C3E50" rx="3"/>
+              <circle cx="200" cy="440" r="8" fill="#34495E"/>
+            </g>
+            
+            <g id="pro-phase-2">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <circle cx="200" cy="440" r="8" fill="#1A252F"/>
+              <line x1="195" y1="410" x2="195" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+              <line x1="200" y1="405" x2="200" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+              <line x1="205" y1="410" x2="205" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+            </g>
+            
+            <g id="pro-phase-3">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="390" stroke="#10B981" stroke-width="3"/>
+              <line x1="190" y1="400" x2="200" y2="390" stroke="#10B981" stroke-width="2"/>
+              <line x1="210" y1="400" x2="200" y2="390" stroke="#10B981" stroke-width="2"/>
+            </g>
+            
+            <g id="pro-phase-4">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="330" stroke="#10B981" stroke-width="3"/>
+              <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <line x1="185" y1="350" x2="200" y2="340" stroke="#10B981" stroke-width="2"/>
+              <line x1="215" y1="350" x2="200" y2="340" stroke="#10B981" stroke-width="2"/>
+            </g>
+            
+            <g id="pro-phase-5">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="290" stroke="#10B981" stroke-width="3"/>
+              <line x1="185" y1="370" x2="200" y2="360" stroke="#059669" stroke-width="2"/>
+              <line x1="215" y1="370" x2="200" y2="360" stroke="#059669" stroke-width="2"/>
+              <circle cx="200" cy="290" r="10" fill="none" stroke="#4A90E2" stroke-width="2"/>
+              <circle cx="200" cy="290" r="5" fill="#4A90E2" opacity="0.3"/>
+            </g>
+            
+            <g id="pro-phase-6">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="270" stroke="#10B981" stroke-width="3"/>
+              <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <circle cx="200" cy="255" r="28" fill="#10B981" opacity="0.6"/>
+              <circle cx="200" cy="255" r="22" fill="#059669" opacity="0.4"/>
+              <line x1="200" y1="227" x2="200" y2="245" stroke="#10B981" stroke-width="3"/>
+            </g>
+            
+            <g id="pro-phase-7">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="270" stroke="#10B981" stroke-width="3"/>
+              <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <circle cx="200" cy="250" r="32" fill="#4A90E2"/>
+              <circle cx="200" cy="250" r="25" fill="#3A7BC8" opacity="0.7"/>
+              <circle cx="190" cy="242" r="8" fill="#5BA3F5" opacity="0.5"/>
+              <line x1="200" y1="218" x2="200" y2="238" stroke="#10B981" stroke-width="3"/>
+            </g>
+            
+            <g id="pro-phase-8">
+              <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+              <line x1="200" y1="440" x2="200" y2="290" stroke="#10B981" stroke-width="3"/>
+              <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+              <circle cx="270" cy="280" r="28" fill="none" stroke="#4A90E2" stroke-width="3" stroke-dasharray="5,5"/>
+            </g>
+          </defs>
+        </svg>
+
+        <!-- POMO MASCOT -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+          <defs>
+            <g id="pomo-neutral">
+              <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+              <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+              <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+              <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+              <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+              <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+              <circle cx="85" cy="100" r="8" fill="#2C3E50"/>
+              <circle cx="115" cy="100" r="8" fill="#2C3E50"/>
+              <circle cx="87" cy="98" r="3" fill="white"/>
+              <circle cx="117" cy="98" r="3" fill="white"/>
+              <path d="M85,125 Q100,125 115,125" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            
+            <g id="pomo-happy">
+              <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+              <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+              <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+              <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+              <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+              <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+              <path d="M77,100 Q85,95 93,100" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+              <path d="M107,100 Q115,95 123,100" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+              <path d="M80,120 Q100,135 120,120" fill="none" stroke="#2C3E50" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            
+            <g id="pomo-thumbsup">
+              <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+              <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+              <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+              <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+              <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+              <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+              <circle cx="85" cy="100" r="8" fill="#2C3E50"/>
+              <circle cx="115" cy="100" r="8" fill="#2C3E50"/>
+              <circle cx="87" cy="98" r="3" fill="white"/>
+              <circle cx="117" cy="98" r="3" fill="white"/>
+              <path d="M85,122 Q100,130 115,122" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+              <ellipse cx="155" cy="100" rx="12" ry="18" fill="#FF6347"/>
+              <rect x="145" y="80" width="10" height="25" fill="#FF6347" rx="5"/>
+            </g>
+            
+            <g id="pomo-proud">
+              <ellipse cx="100" cy="120" rx="60" ry="65" fill="#FF6347"/>
+              <ellipse cx="100" cy="110" rx="55" ry="55" fill="#FF4500"/>
+              <ellipse cx="80" cy="105" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+              <line x1="100" y1="55" x2="100" y2="75" stroke="#228B22" stroke-width="5"/>
+              <path d="M85,60 Q100,50 115,60" fill="none" stroke="#32CD32" stroke-width="3"/>
+              <rect x="70" y="45" width="60" height="12" fill="#FFD700"/>
+              <polygon points="75,45 80,35 85,45" fill="#FFD700"/>
+              <polygon points="95,45 100,30 105,45" fill="#FFD700"/>
+              <polygon points="115,45 120,35 125,45" fill="#FFD700"/>
+              <circle cx="100" cy="35" r="5" fill="#FF4500"/>
+              <path d="M77,110 Q85,105 93,110" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+              <path d="M107,110 Q115,105 123,110" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+              <path d="M85,130 Q100,142 115,130" fill="none" stroke="#2C3E50" stroke-width="4" stroke-linecap="round"/>
+            </g>
+          </defs>
+        </svg>
+    </div>
 
     <script src="app.js"></script>
 </body>
