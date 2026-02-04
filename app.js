@@ -28,6 +28,12 @@ let state = {
 let youtubePlayer = null;
 let isYouTubeAPIReady = false;
 
+let pomoState = {
+    currentMood: 'neutral',
+    currentMessage: '',
+    clickCount: 0
+};
+
 // ============================================
 // DATA
 // ============================================
@@ -91,17 +97,84 @@ const timerPresets = {
     ]
 };
 
-// Fasi crescita: percentuali del tempo in cui cambia fase
 const growthPhases = [
-    { phase: 1, percent: 0, name: "semina" },       // 0%
-    { phase: 2, percent: 0.01, name: "innaffiatura" }, // dopo 10 sec
-    { phase: 3, percent: 0.20, name: "germoglio" }, // 20%
-    { phase: 4, percent: 0.40, name: "crescita" },  // 40%
-    { phase: 5, percent: 0.60, name: "fioritura" }, // 60%
-    { phase: 6, percent: 0.80, name: "verde" },     // 80%
-    { phase: 7, percent: 0.96, name: "maturo" },    // 96%
-    { phase: 8, percent: 1.0, name: "raccolta" }    // 100%
+    { phase: 1, percent: 0, name: "semina" },
+    { phase: 2, percent: 0.01, name: "innaffiatura" },
+    { phase: 3, percent: 0.20, name: "germoglio" },
+    { phase: 4, percent: 0.40, name: "crescita" },
+    { phase: 5, percent: 0.60, name: "fioritura" },
+    { phase: 6, percent: 0.80, name: "verde" },
+    { phase: 7, percent: 0.96, name: "maturo" },
+    { phase: 8, percent: 1.0, name: "raccolta" }
 ];
+
+const pomoMessages = {
+    'screen-ritual-builder': {
+        student: [
+            "Hey! Scegli bene gli ingredienti, ogni rituale è unico come te! 🎨",
+            "Il segreto? Iniziare sempre nello stesso modo. Il cervello adora le routine! 🧠",
+            "Pro tip: Aggiungi SEMPRE 'chiudi notifiche'. È il passo più importante! 📵"
+        ],
+        professional: [
+            "Precisione nel rituale = prestazioni costanti. Non lasciare nulla al caso.",
+            "Un sistema solido batte la motivazione. Costruisci il tuo protocollo.",
+            "Elimina le decisioni inutili: più automatico è il rituale, più energia conservi."
+        ]
+    },
+    'screen-timer-settings': {
+        student: [
+            "Scegli il ritmo giusto per te! Non esiste un tempo perfetto per tutti 🎵",
+            "Musica lofi = la mia preferita! Ma ognuno ha il suo flow 🎧",
+            "Timer troppo lunghi? Rischi burnout. Troppo corti? Non entri in flow. Trova il tuo sweet spot!"
+        ],
+        professional: [
+            "I professionisti top usano 50/10. Ma testa cosa funziona per il TUO lavoro.",
+            "La musica può aumentare la produttività del 15%. O distrarti. Conosci te stesso.",
+            "Ottimizza, misura, aggiusta. Il metodo scientifico applicato alla produttività."
+        ]
+    },
+    'screen-ritual-execution': {
+        student: [
+            "Ogni spunta è un voto per la persona che vuoi diventare! 💪",
+            "Il rituale non è una perdita di tempo: è l'investimento migliore della giornata! ⏰",
+            "Sento che stai per fare qualcosa di grande. Completa il rituale e sblocca il tuo potenziale! 🔥"
+        ],
+        professional: [
+            "Il rituale crea separazione cognitiva. Stai entrando in modalità lavoro.",
+            "I performer d'élite hanno tutti rituali pre-performance. Tu sei uno di loro.",
+            "Ogni azione completata rinforza il percorso neurale. Stai letteralmente ricablando il cervello."
+        ]
+    },
+    'screen-recap': {
+        student: [
+            "WOW! Guarda quanti pomodori! Sei una MACCHINA! 🔥🔥🔥",
+            "Ogni pomodoro è una vittoria. E tu oggi hai vinto parecchio! 🏆",
+            "Mi hai fatto venire fame a forza di crescere pomodori! Ora riposa, te lo sei meritato! 😴"
+        ],
+        professional: [
+            "Risultati tangibili. Progressione misurabile. Questo è ciò che conta.",
+            "La coerenza batte l'intensità. E tu oggi sei stato coerente.",
+            "Il compound effect in azione: ogni sessione si somma alle precedenti."
+        ]
+    }
+};
+
+const pomoTips = {
+    student: [
+        "Sapevi che il metodo Pomodoro prende il nome da un timer da cucina a forma di pomodoro? 🍅",
+        "Il cervello lavora a cicli: 25 minuti è la durata media di attenzione massima!",
+        "Le pause NON sono perdite di tempo: il cervello consolida le informazioni durante i break! 🧠",
+        "Ogni volta che resisti a una distrazione, rinforzi il 'muscolo' dell'attenzione! 💪",
+        "Fun fact: io sono nato da un seme di pomodoro motivazionale! 😄"
+    ],
+    professional: [
+        "Il deep work richiede ~23 minuti per essere raggiunto. Questo è il potere del Pomodoro.",
+        "Cal Newport: 'La produttività non è gestire il tempo, è gestire l'attenzione.'",
+        "Il multitasking riduce la produttività del 40%. Focus = superpotere.",
+        "Peak performers lavorano in blocchi intensi + recovery. Non in maratone infinite.",
+        "La pausa strategica è parte del lavoro, non un lusso."
+    ]
+};
 
 // ============================================
 // UTILITY FUNCTIONS
@@ -113,68 +186,7 @@ function showScreen(screenId) {
     });
     document.getElementById(screenId).classList.add('active');
     updateProgressTracker(screenId);
-    
-    // Mostra Pomo guida dove appropriato
-    showPomoGuide(screenId);
-}
-
-function showPomoGuide(screenId) {
-    const pomoGuide = document.getElementById('pomo-guide');
-    if (!pomoGuide) return;
-    
-    const messages = {
-        'screen-profile': { show: false },
-        'screen-ritual-builder': { 
-            show: true, 
-            mascot: 'pomo-happy',
-            text: state.profile === 'student' ? 
-                "Scegli gli ingredienti per il tuo rituale perfetto! 🎯" : 
-                "Costruisci il sistema che ti porta al successo. Precisione prima di tutto."
-        },
-        'screen-timer-settings': { 
-            show: true, 
-            mascot: 'pomo-neutral',
-            text: state.profile === 'student' ? 
-                "Quale ritmo funziona meglio per te? 🎵" : 
-                "Ottimizza i parametri per massima produttività."
-        },
-        'screen-ritual-execution': { 
-            show: true, 
-            mascot: 'pomo-thumbsup',
-            text: state.profile === 'student' ? 
-                "Completa ogni passo, io aspetto qui! 💪" : 
-                "Esegui il protocollo. Io monitoro il processo."
-        },
-        'screen-timer': { show: false }, // Durante timer, Pomo è la pianta
-        'screen-recap': { 
-            show: true, 
-            mascot: 'pomo-proud',
-            text: state.profile === 'student' ? 
-                "WOW! Guarda quanti frutti hai raccolto! 🎉" : 
-                "Risultati tangibili. Progressione costante."
-        }
-    };
-    
-    const config = messages[screenId];
-    
-    if (config && config.show) {
-        pomoGuide.style.display = 'flex';
-        updatePomoMascot(config.mascot, config.text);
-    } else {
-        pomoGuide.style.display = 'none';
-    }
-}
-
-function updatePomoMascot(mascotType, text) {
-    const pomoSvg = document.querySelector('#pomo-guide svg use');
-    const pomoText = document.querySelector('#pomo-guide .pomo-speech p');
-    
-    if (pomoSvg) {
-        pomoSvg.setAttribute('href', `#${mascotType}`);
-    }
-    if (pomoText) {
-        pomoText.textContent = text;
-    }
+    updatePomoMessage(screenId);
 }
 
 function updateProgressTracker(screenId) {
@@ -276,6 +288,161 @@ function loadTheme(profile) {
 }
 
 // ============================================
+// POMO MASCOT - SISTEMA INTERATTIVO
+// ============================================
+
+function createPomoContainer() {
+    const container = document.createElement('div');
+    container.className = 'pomo-container';
+    container.innerHTML = `
+        <div class="pomo-mascot-wrapper">
+            <div class="pomo-speech student" id="pomo-speech">
+                <p id="pomo-text">Ciao! Sono Pomo! Clicca su di me per consigli! 🍅</p>
+            </div>
+            <svg class="pomo-mascot" id="pomo-svg" viewBox="0 0 200 200">
+                <use href="#pomo-neutral" id="pomo-use"></use>
+            </svg>
+        </div>
+        <div class="pomo-hint" id="pomo-hint">👆 Clicca per tips!</div>
+    `;
+    document.body.appendChild(container);
+    
+    document.getElementById('pomo-svg').addEventListener('click', handlePomoClick);
+    
+    setTimeout(() => {
+        const hint = document.getElementById('pomo-hint');
+        if (hint) hint.style.display = 'none';
+    }, 5000);
+}
+
+function handlePomoClick() {
+    pomoState.clickCount++;
+    
+    const pomoSvg = document.getElementById('pomo-svg');
+    const pomoText = document.getElementById('pomo-text');
+    
+    if (!pomoSvg || !pomoText) return;
+    
+    pomoSvg.classList.add('pomo-bounce');
+    setTimeout(() => pomoSvg.classList.remove('pomo-bounce'), 600);
+    
+    const tips = pomoTips[state.profile] || pomoTips.student;
+    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+    
+    pomoText.innerHTML = '<div class="pomo-thinking"><span></span><span></span><span></span></div>';
+    
+    setTimeout(() => {
+        pomoText.textContent = randomTip;
+        updatePomoMood('happy');
+    }, 800);
+    
+    setTimeout(() => {
+        const messages = pomoMessages[getCurrentScreen()];
+        if (messages) {
+            const profileMessages = messages[state.profile] || messages.student;
+            pomoText.textContent = profileMessages[Math.floor(Math.random() * profileMessages.length)];
+        }
+        updatePomoMood('neutral');
+    }, 5000);
+}
+
+function getCurrentScreen() {
+    const activeScreen = document.querySelector('.screen.active');
+    return activeScreen ? activeScreen.id : 'screen-profile';
+}
+
+function updatePomoMood(mood) {
+    const pomoUse = document.getElementById('pomo-use');
+    if (pomoUse) {
+        pomoUse.setAttribute('href', `#pomo-${mood}`);
+        pomoState.currentMood = mood;
+    }
+}
+
+function updatePomoMessage(screenId) {
+    const pomoContainer = document.querySelector('.pomo-container');
+    const pomoText = document.getElementById('pomo-text');
+    const pomoSpeech = document.getElementById('pomo-speech');
+    const pomoSvg = document.getElementById('pomo-svg');
+    
+    if (!pomoContainer || !pomoText) return;
+    
+    if (screenId === 'screen-profile' || screenId === 'screen-timer') {
+        pomoContainer.style.display = 'none';
+        return;
+    }
+    
+    pomoContainer.style.display = 'flex';
+    
+    if (pomoSpeech) {
+        pomoSpeech.className = `pomo-speech ${state.profile}`;
+    }
+    
+    const messages = pomoMessages[screenId];
+    if (!messages) return;
+    
+    const profileMessages = messages[state.profile] || messages.student;
+    const randomMessage = profileMessages[Math.floor(Math.random() * profileMessages.length)];
+    
+    pomoText.style.opacity = '0';
+    
+    setTimeout(() => {
+        pomoText.textContent = randomMessage;
+        pomoText.style.opacity = '1';
+        pomoText.style.transition = 'opacity 0.5s ease';
+    }, 300);
+    
+    if (screenId === 'screen-ritual-execution') {
+        updatePomoMood('thumbsup');
+    } else if (screenId === 'screen-recap') {
+        updatePomoMood('proud');
+        if (pomoSvg) {
+            pomoSvg.classList.add('pomo-celebrate');
+            setTimeout(() => pomoSvg.classList.remove('pomo-celebrate'), 1000);
+        }
+    } else {
+        updatePomoMood('happy');
+    }
+}
+
+function pomoReactToChecklistItem(completed) {
+    const pomoSvg = document.getElementById('pomo-svg');
+    const pomoText = document.getElementById('pomo-text');
+    
+    if (!pomoSvg || !pomoText) return;
+    
+    if (completed) {
+        pomoSvg.classList.add('pomo-bounce');
+        setTimeout(() => pomoSvg.classList.remove('pomo-bounce'), 600);
+        
+        const encouragements = state.profile === 'student' 
+            ? ["Ottimo! 💪", "Perfetto! 🎯", "Continua così! 🔥", "Grande! ⭐"]
+            : ["Check.", "Eseguito.", "Ottimo.", "Procedere."];
+        
+        const prev = pomoText.textContent;
+        pomoText.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
+        
+        setTimeout(() => {
+            pomoText.textContent = prev;
+        }, 1500);
+    }
+}
+
+function pomoReactToPomodoro() {
+    const pomoSvg = document.getElementById('pomo-svg');
+    
+    if (!pomoSvg) return;
+    
+    updatePomoMood('proud');
+    pomoSvg.classList.add('pomo-celebrate');
+    
+    setTimeout(() => {
+        pomoSvg.classList.remove('pomo-celebrate');
+        updatePomoMood('happy');
+    }, 2000);
+}
+
+// ============================================
 // TOMATO GROWTH ANIMATION
 // ============================================
 
@@ -286,14 +453,12 @@ function initTomatoGrowth() {
         return;
     }
     
-    // Crea SVG container
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'tomato-growth');
     svg.setAttribute('viewBox', '0 0 400 500');
     svg.setAttribute('width', '400');
     svg.setAttribute('height', '500');
     
-    // Crea use element
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     const prefix = state.profile === 'student' ? 'student' : 'pro';
     use.setAttribute('href', `#${prefix}-phase-1`);
@@ -307,7 +472,6 @@ function initTomatoGrowth() {
 function updateTomatoGrowth() {
     const progress = 1 - (state.timeRemaining / state.totalTime);
     
-    // Trova la fase corretta
     let targetPhase = 1;
     for (let i = 0; i < growthPhases.length; i++) {
         if (progress >= growthPhases[i].percent) {
@@ -315,14 +479,12 @@ function updateTomatoGrowth() {
         }
     }
     
-    // Se cambia fase, aggiorna SVG
     if (targetPhase !== state.currentGrowthPhase) {
         state.currentGrowthPhase = targetPhase;
         const use = document.querySelector('.tomato-growth use');
         const prefix = state.profile === 'student' ? 'student' : 'pro';
         
         if (use) {
-            // Animazione fade
             const svg = document.querySelector('.tomato-growth');
             svg.classList.add('fade-out');
             
@@ -331,7 +493,6 @@ function updateTomatoGrowth() {
                 svg.classList.remove('fade-out');
                 svg.classList.add('fade-in');
                 
-                // Pulse animation per fase matura
                 if (targetPhase === 7) {
                     svg.classList.add('tomato-pulse');
                 }
@@ -358,7 +519,6 @@ function addTomatoToBasket() {
     if (basket) {
         basket.textContent = state.pomodorosCompleted;
         
-        // Animazione bounce del cesto
         const basketContainer = document.querySelector('.tomato-basket');
         basketContainer.style.transform = 'scale(1.2)';
         setTimeout(() => {
@@ -584,10 +744,15 @@ function updateRitualProgress() {
     const startBtn = document.getElementById('btn-start-timer');
     startBtn.disabled = checked !== total;
     
-    checkboxes.forEach(cb => {
+    checkboxes.forEach((cb, index) => {
         const item = cb.closest('.checklist-item');
+        const wasCompleted = item.classList.contains('completed');
+        
         if (cb.checked) {
-            item.classList.add('completed');
+            if (!wasCompleted) {
+                item.classList.add('completed');
+                pomoReactToChecklistItem(true);
+            }
         } else {
             item.classList.remove('completed');
         }
@@ -607,14 +772,12 @@ function startTimer() {
     state.pomodorosCompleted = getTodayPomodoros();
     state.pomodorosThisSession = 0;
     
-    // Inizializza crescita pomodoro
     initTomatoGrowth();
     
     updateTimerDisplay();
     updateIdentityBanner();
     updatePomodoroCount();
     
-    // Mostra cesto
     document.querySelector('.tomato-basket').style.display = 'flex';
     
     if (state.musicChoice !== 'none') {
@@ -662,7 +825,7 @@ function tick() {
     if (!state.isPaused && state.timeRemaining > 0) {
         state.timeRemaining--;
         updateTimerDisplay();
-        updateTomatoGrowth(); // Aggiorna crescita pianta
+        updateTomatoGrowth();
     } else if (state.timeRemaining === 0) {
         handlePhaseComplete();
     }
@@ -679,7 +842,6 @@ function handlePhaseComplete() {
         updatePomodoroCount();
         updateIdentityBanner();
         
-        // Animazione raccolta
         animateHarvest();
         
         if (state.profile === 'student') {
@@ -731,7 +893,6 @@ function startWorkSession() {
     state.timeRemaining = state.timerSettings.work * 60;
     state.totalTime = state.timeRemaining;
     
-    // Reset crescita
     const container = document.querySelector('.tomato-container');
     container.innerHTML = '';
     initTomatoGrowth();
@@ -751,7 +912,6 @@ function startBreak(type) {
     state.timeRemaining = duration * 60;
     state.totalTime = state.timeRemaining;
     
-    // Nascondi pianta durante pausa
     const container = document.querySelector('.tomato-container');
     if (container) {
         container.style.opacity = '0.3';
@@ -1032,6 +1192,10 @@ function showRecap() {
     clearInterval(state.timerInterval);
     showScreen('screen-recap');
     
+    setTimeout(() => {
+        pomoReactToPomodoro();
+    }, 500);
+    
     document.getElementById('recap-pomodoros').textContent = state.pomodorosCompleted;
     document.getElementById('recap-streak').textContent = state.streak;
     
@@ -1087,37 +1251,6 @@ function renderWeekChart() {
     }).join('');
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadState();
-    initProfileSelection();
-    
-    // Crea Pomo guida (nascosto inizialmente)
-    createPomoGuideElement();
-    
-    // Crea basket (nascosto inizialmente)
-    createBasketElement();
-});
-
-function createPomoGuideElement() {
-    const pomoGuide = document.createElement('div');
-    pomoGuide.id = 'pomo-guide';
-    pomoGuide.className = 'pomo-guide';
-    pomoGuide.style.display = 'none';
-    pomoGuide.innerHTML = `
-        <svg class="pomo-mascot" viewBox="0 0 200 200">
-            <use href="#pomo-neutral"></use>
-        </svg>
-        <div class="pomo-speech">
-            <p>Ciao! Sono Pomo, il tuo compagno di crescita!</p>
-        </div>
-    `;
-    document.body.appendChild(pomoGuide);
-}
-
 function createBasketElement() {
     const basket = document.createElement('div');
     basket.className = 'tomato-basket';
@@ -1131,3 +1264,14 @@ function createBasketElement() {
     `;
     document.body.appendChild(basket);
 }
+
+// ============================================
+// INITIALIZATION
+// ============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadState();
+    initProfileSelection();
+    createPomoContainer();
+    createBasketElement();
+});
