@@ -1,0 +1,124 @@
+/* STILE STUDENTE: Energetic Focus */
+
+:root {
+    --primary-color: #FF6B35;
+    --secondary-color: #F7931E;
+    --accent-color: #4ECDC4;
+    --accent-2: #A56EFF;
+    --bg-gradient: linear-gradient(135deg, #FFF8F0 0%, #FFE8D6 100%);
+    --text-dark: #2A2A2A;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg-gradient);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+}
+
+.btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 25px rgba(255, 107, 53, 0.5);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.profile-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.ritual-item button {
+    background: var(--primary-color);
+    color: white;
+}
+
+.ritual-item button:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.ritual-item ul li:before {
+    color: var(--primary-color);
+}
+
+.ingredient-item:hover {
+    border-color: var(--accent-color);
+    background: #F0FFFE;
+}
+
+.ingredient-item.added {
+    background: #C3F4E8;
+    border-color: var(--accent-color);
+}
+
+#cart-count {
+    color: var(--primary-color);
+}
+
+.preset-btn.active {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+}
+
+.checklist-item.completed {
+    background: linear-gradient(135deg, #FFE8D6, #FFF0C4);
+    border-color: var(--secondary-color);
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+}
+
+.identity-banner {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-2));
+}
+
+.timer-ring-progress {
+    stroke: url(#gradient-student);
+}
+
+/* Aggiungiamo il gradiente SVG inline via JS, ma intanto colore solid */
+.timer-ring-progress {
+    stroke: var(--primary-color);
+}
+
+.timer-countdown {
+    color: var(--primary-color);
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-2));
+}
+
+.chart-bar {
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Animazioni extra per studenti */
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.btn-primary:hover:not(:disabled) {
+    animation: bounce-subtle 0.6s ease;
+}
+
+/* Confetti effect (opzionale, attivato via JS) */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--primary-color);
+    position: absolute;
+    animation: confetti-fall 3s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
