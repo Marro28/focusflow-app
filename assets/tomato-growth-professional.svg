@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" style="display:none">
+  <defs>
+    <!-- FASE 1: SEMINA (minimale) -->
+    <g id="pro-phase-1">
+      <rect x="100" y="420" width="200" height="50" fill="#2C3E50" rx="3"/>
+      <circle cx="200" cy="440" r="8" fill="#34495E"/>
+    </g>
+    
+    <!-- FASE 2: INNAFFIATURA -->
+    <g id="pro-phase-2">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <circle cx="200" cy="440" r="8" fill="#1A252F"/>
+      <line x1="195" y1="410" x2="195" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+      <line x1="200" y1="405" x2="200" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+      <line x1="205" y1="410" x2="205" y2="425" stroke="#4A90E2" stroke-width="2" opacity="0.6"/>
+    </g>
+    
+    <!-- FASE 3: GERMOGLIO (minimal) -->
+    <g id="pro-phase-3">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="390" stroke="#10B981" stroke-width="3"/>
+      <line x1="190" y1="400" x2="200" y2="390" stroke="#10B981" stroke-width="2"/>
+      <line x1="210" y1="400" x2="200" y2="390" stroke="#10B981" stroke-width="2"/>
+    </g>
+    
+    <!-- FASE 4: CRESCITA -->
+    <g id="pro-phase-4">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="330" stroke="#10B981" stroke-width="3"/>
+      <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <line x1="185" y1="350" x2="200" y2="340" stroke="#10B981" stroke-width="2"/>
+      <line x1="215" y1="350" x2="200" y2="340" stroke="#10B981" stroke-width="2"/>
+    </g>
+    
+    <!-- FASE 5: FIORITURA (geometrica) -->
+    <g id="pro-phase-5">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="290" stroke="#10B981" stroke-width="3"/>
+      <line x1="185" y1="370" x2="200" y2="360" stroke="#059669" stroke-width="2"/>
+      <line x1="215" y1="370" x2="200" y2="360" stroke="#059669" stroke-width="2"/>
+      <!-- Fiore geometrico -->
+      <circle cx="200" cy="290" r="10" fill="none" stroke="#4A90E2" stroke-width="2"/>
+      <circle cx="200" cy="290" r="5" fill="#4A90E2" opacity="0.3"/>
+    </g>
+    
+    <!-- FASE 6: POMODORO VERDE (geometrico) -->
+    <g id="pro-phase-6">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="270" stroke="#10B981" stroke-width="3"/>
+      <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <!-- Pomodoro geometrico verde -->
+      <circle cx="200" cy="255" r="28" fill="#10B981" opacity="0.6"/>
+      <circle cx="200" cy="255" r="22" fill="#059669" opacity="0.4"/>
+      <line x1="200" y1="227" x2="200" y2="245" stroke="#10B981" stroke-width="3"/>
+    </g>
+    
+    <!-- FASE 7: POMODORO MATURO (geometrico blu) -->
+    <g id="pro-phase-7">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="270" stroke="#10B981" stroke-width="3"/>
+      <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <!-- Pomodoro geometrico BLU (professionale) -->
+      <circle cx="200" cy="250" r="32" fill="#4A90E2"/>
+      <circle cx="200" cy="250" r="25" fill="#3A7BC8" opacity="0.7"/>
+      <circle cx="190" cy="242" r="8" fill="#5BA3F5" opacity="0.5"/>
+      <line x1="200" y1="218" x2="200" y2="238" stroke="#10B981" stroke-width="3"/>
+    </g>
+    
+    <!-- FASE 8: RACCOLTA (minimal) -->
+    <g id="pro-phase-8">
+      <rect x="100" y="420" width="200" height="50" fill="#34495E" rx="3"/>
+      <line x1="200" y1="440" x2="200" y2="290" stroke="#10B981" stroke-width="3"/>
+      <line x1="185" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <line x1="215" y1="380" x2="200" y2="370" stroke="#059669" stroke-width="2"/>
+      <!-- Pomodoro raccolto (outline) -->
+      <circle cx="270" cy="280" r="28" fill="none" stroke="#4A90E2" stroke-width="3" stroke-dasharray="5,5"/>
+    </g>
+  </defs>
+</svg>
