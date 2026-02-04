@@ -1,0 +1,101 @@
+/* STILE PROFESSIONISTA: Deep Focus */
+
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #1A2332;
+    --accent-color: #10B981;
+    --bg-gradient: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+    --text-dark: #0F172A;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-gradient);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 10px rgba(74, 144, 226, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #3A7BC8;
+    box-shadow: 0 4px 20px rgba(74, 144, 226, 0.4);
+}
+
+.profile-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.ritual-item button {
+    background: var(--primary-color);
+    color: white;
+}
+
+.ritual-item button:hover {
+    background: #3A7BC8;
+}
+
+.ritual-item ul li:before {
+    color: var(--primary-color);
+}
+
+.ingredient-item:hover {
+    border-color: var(--primary-color);
+    background: #EFF6FF;
+}
+
+.ingredient-item.added {
+    background: #DBEAFE;
+    border-color: var(--primary-color);
+}
+
+#cart-count {
+    color: var(--primary-color);
+}
+
+.preset-btn.active {
+    border-color: var(--primary-color);
+    background: rgba(74, 144, 226, 0.08);
+}
+
+.checklist-item.completed {
+    background: #D1FAE5;
+    border-color: var(--accent-color);
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.identity-banner {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+.timer-ring-progress {
+    stroke: var(--primary-color);
+}
+
+.timer-countdown {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+.chart-bar {
+    background: linear-gradient(180deg, var(--primary-color), var(--accent-color));
+}
+
+/* Animazioni minimal per professionisti */
+.btn-primary:hover:not(:disabled) {
+    transition: all 0.2s ease;
+}
+
+/* Glow effect subtle */
+.timer-countdown {
+    text-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+}
