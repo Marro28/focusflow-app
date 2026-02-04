@@ -21,34 +21,18 @@ let state = {
     timerInterval: null,
     dailyPomodoros: [],
     streak: 0,
-    audioPlayer: null,
     isMusicPlaying: false
 };
 
 // ============================================
-// MUSIC URLs (YouTube/SoundCloud embeds o file locali)
+// YOUTUBE PLAYER VARIABLES
 // ============================================
 
-const musicSources = {
-    lofi: 'https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&loop=1',
-    ambient: 'https://www.youtube.com/embed/lTRiuFIWV54?autoplay=1&loop=1',
-    nature: 'https://www.youtube.com/embed/eKFTSSKCzWA?autoplay=1&loop=1',
-    classical: 'https://www.youtube.com/embed/jgpJVI3tDbY?autoplay=1&loop=1',
-    whitenoise: 'https://www.youtube.com/embed/nMfPqeZjc2c?autoplay=1&loop=1'
-};
-
-// Alternative: usa file audio locali o servizi come Spotify embed
-// Esempio con file audio:
-const musicSourcesLocal = {
-    lofi: 'assets/lofi.mp3',
-    ambient: 'assets/ambient.mp3',
-    nature: 'assets/nature.mp3',
-    classical: 'assets/classical.mp3',
-    whitenoise: 'assets/whitenoise.mp3'
-};
+let youtubePlayer = null;
+let isYouTubeAPIReady = false;
 
 // ============================================
-// DATA
+// DATA: Rituali e Ingredienti
 // ============================================
 
 const ritualTemplates = {
@@ -119,8 +103,6 @@ function showScreen(screenId) {
         screen.classList.remove('active');
     });
     document.getElementById(screenId).classList.add('active');
-    
-    // Aggiorna progress tracker
     updateProgressTracker(screenId);
 }
 
@@ -134,12 +116,10 @@ function updateProgressTracker(screenId) {
     
     tracker.style.display = 'flex';
     
-    // Reset
     document.querySelectorAll('.progress-step').forEach(step => {
         step.classList.remove('active');
     });
     
-    // Attiva step corrente
     if (screenId === 'screen-ritual-builder' || screenId === 'screen-ritual-execution') {
         document.querySelector('[data-step="1"]').classList.add('active');
     } else if (screenId === 'screen-timer-settings') {
@@ -465,6 +445,7 @@ function startTimer() {
     state.pomodorosThisSession = 0;
     
     updateTimerDisplay();
+    updateTimerRing();
     updateIdentityBanner();
     updatePomodoroCount();
     
@@ -475,24 +456,41 @@ function startTimer() {
     
     state.timerInterval = setInterval(tick, 1000);
     
+    // Event listeners per controlli timer
+    const btnPause = document.getElementById('btn-pause');
+    const btnResume = document.getElementById('btn-resume');
+    const btnStop = document.getElementById('btn-stop');
+    
+    btnPause.replaceWith(btnPause.cloneNode(true));
+    btnResume.replaceWith(btnResume.cloneNode(true));
+    btnStop.replaceWith(btnStop.cloneNode(true));
+    
     document.getElementById('btn-pause').addEventListener('click', pauseTimer);
     document.getElementById('btn-resume').addEventListener('click', resumeTimer);
     document.getElementById('btn-stop').addEventListener('click', stopTimer);
     
     // Music controls
+    if (state.musicChoice !== 'none') {
+        setupMusicControls();
+    }
+}
+
+function setupMusicControls() {
+    document.getElementById('music-controls').style.display = 'flex';
+    
     const musicToggle = document.getElementById('btn-music-toggle');
     const volumeSlider = document.getElementById('volume-slider');
     
-    if (state.musicChoice !== 'none') {
-        document.getElementById('music-controls').style.display = 'flex';
-        
-        musicToggle.addEventListener('click', toggleMusic);
-        volumeSlider.addEventListener('input', (e) => {
-            if (state.audioPlayer) {
-                state.audioPlayer.volume = e.target.value / 100;
-            }
-        });
-    }
+    const newMusicToggle = musicToggle.cloneNode(true);
+    musicToggle.parentNode.replaceChild(newMusicToggle, musicToggle);
+    
+    const newVolumeSlider = volumeSlider.cloneNode(true);
+    volumeSlider.parentNode.replaceChild(newVolumeSlider, volumeSlider);
+    
+    newMusicToggle.addEventListener('click', toggleMusic);
+    newVolumeSlider.addEventListener('input', (e) => {
+        setMusicVolume(parseInt(e.target.value));
+    });
 }
 
 function tick() {
@@ -516,7 +514,6 @@ function handlePhaseComplete() {
         updatePomodoroCount();
         updateIdentityBanner();
         
-        // Celebrazione per studenti
         if (state.profile === 'student') {
             createConfetti();
         }
@@ -564,6 +561,11 @@ function startWorkSession() {
     state.timeRemaining = state.timerSettings.work * 60;
     state.totalTime = state.timeRemaining;
     updateTimerDisplay();
+    
+    if (youtubePlayer && state.musicChoice !== 'none') {
+        resumeMusic();
+    }
+    
     state.timerInterval = setInterval(tick, 1000);
 }
 
@@ -574,9 +576,8 @@ function startBreak(type) {
     state.totalTime = state.timeRemaining;
     updateTimerDisplay();
     
-    // Pausa musica durante break
-    if (state.audioPlayer && state.isMusicPlaying) {
-        state.audioPlayer.pause();
+    if (youtubePlayer && state.isMusicPlaying) {
+        pauseMusic();
     }
     
     state.timerInterval = setInterval(tick, 1000);
@@ -587,8 +588,8 @@ function pauseTimer() {
     document.getElementById('btn-pause').style.display = 'none';
     document.getElementById('btn-resume').style.display = 'inline-block';
     
-    if (state.audioPlayer && state.isMusicPlaying) {
-        state.audioPlayer.pause();
+    if (youtubePlayer && state.isMusicPlaying) {
+        pauseMusic();
     }
 }
 
@@ -597,8 +598,8 @@ function resumeTimer() {
     document.getElementById('btn-pause').style.display = 'inline-block';
     document.getElementById('btn-resume').style.display = 'none';
     
-    if (state.audioPlayer && state.musicChoice !== 'none' && state.currentPhase === 'work') {
-        state.audioPlayer.play();
+    if (youtubePlayer && state.musicChoice !== 'none' && state.currentPhase === 'work') {
+        resumeMusic();
     }
 }
 
@@ -667,47 +668,165 @@ function playSound() {
 }
 
 // ============================================
-// MUSIC FUNCTIONS
+// MUSIC FUNCTIONS (YouTube Iframe API)
 // ============================================
 
-function startMusic() {
-    const player = document.getElementById('audio-player');
-    
-    // NOTA: Per YouTube embeds, dovrai usare iframe invece di <audio>
-    // Qui uso una soluzione semplificata con audio tag (richiede file locali)
-    
-    // Se usi file locali:
-    if (musicSourcesLocal[state.musicChoice]) {
-        player.src = musicSourcesLocal[state.musicChoice];
-        player.volume = 0.5;
-        player.play().catch(err => {
-            console.log('Autoplay bloccato dal browser:', err);
-        });
-        state.audioPlayer = player;
-        state.isMusicPlaying = true;
+function loadYouTubeAPI() {
+    if (document.getElementById('youtube-iframe-api')) {
+        return;
     }
     
-    // TODO: Per YouTube, crea un iframe nascosto e usa YouTube Player API
+    const tag = document.createElement('script');
+    tag.id = 'youtube-iframe-api';
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+window.onYouTubeIframeAPIReady = function() {
+    isYouTubeAPIReady = true;
+    console.log('YouTube API pronta');
+};
+
+function startMusic() {
+    if (state.musicChoice === 'none') return;
+    
+    if (!isYouTubeAPIReady) {
+        loadYouTubeAPI();
+        
+        const checkAPI = setInterval(() => {
+            if (isYouTubeAPIReady) {
+                clearInterval(checkAPI);
+                createYouTubePlayer();
+            }
+        }, 100);
+    } else {
+        createYouTubePlayer();
+    }
+}
+
+function createYouTubePlayer() {
+    const existingDiv = document.getElementById('youtube-player-div');
+    if (existingDiv) {
+        existingDiv.remove();
+    }
+    
+    const playerDiv = document.createElement('div');
+    playerDiv.id = 'youtube-player-div';
+    playerDiv.style.position = 'fixed';
+    playerDiv.style.bottom = '-500px';
+    playerDiv.style.left = '0';
+    playerDiv.style.zIndex = '-1';
+    document.body.appendChild(playerDiv);
+    
+    const videoId = getYouTubeVideoId(state.musicChoice);
+    
+    if (!videoId) {
+        console.error('Video ID non valido');
+        return;
+    }
+    
+    youtubePlayer = new YT.Player('youtube-player-div', {
+        height: '360',
+        width: '640',
+        videoId: videoId,
+        playerVars: {
+            autoplay: 1,
+            controls: 0,
+            loop: 1,
+            playlist: videoId,
+            modestbranding: 1,
+            rel: 0,
+            showinfo: 0,
+            fs: 0,
+            playsinline: 1
+        },
+        events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+            onError: onPlayerError
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    event.target.setVolume(50);
+    event.target.playVideo();
+    state.isMusicPlaying = true;
+    
+    console.log('Player YouTube pronto e avviato');
+}
+
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        state.isMusicPlaying = true;
+        const btn = document.getElementById('btn-music-toggle');
+        if (btn) btn.textContent = '🔊 Musica ON';
+    } else if (event.data === YT.PlayerState.PAUSED) {
+        state.isMusicPlaying = false;
+        const btn = document.getElementById('btn-music-toggle');
+        if (btn) btn.textContent = '🔇 Musica OFF';
+    }
+}
+
+function onPlayerError(event) {
+    console.error('Errore YouTube Player:', event.data);
+    alert('Errore nel caricamento della musica. Verifica la connessione internet.');
+}
+
+function getYouTubeVideoId(musicType) {
+    const videoIds = {
+        lofi: 'jfKfPfyJRdk',
+        ambient: 'lTRiuFIWV54',
+        nature: 'eKFTSSKCzWA',
+        classical: 'jgpJVI3tDbY',
+        whitenoise: 'nMfPqeZjc2c'
+    };
+    
+    return videoIds[musicType] || null;
 }
 
 function stopMusic() {
-    if (state.audioPlayer) {
-        state.audioPlayer.pause();
-        state.audioPlayer.currentTime = 0;
+    if (youtubePlayer && typeof youtubePlayer.stopVideo === 'function') {
+        youtubePlayer.stopVideo();
         state.isMusicPlaying = false;
+    }
+}
+
+function pauseMusic() {
+    if (youtubePlayer && typeof youtubePlayer.pauseVideo === 'function') {
+        youtubePlayer.pauseVideo();
+        state.isMusicPlaying = false;
+    }
+}
+
+function resumeMusic() {
+    if (youtubePlayer && typeof youtubePlayer.playVideo === 'function') {
+        youtubePlayer.playVideo();
+        state.isMusicPlaying = true;
     }
 }
 
 function toggleMusic() {
     const btn = document.getElementById('btn-music-toggle');
+    
+    if (!youtubePlayer) {
+        console.error('Player non inizializzato');
+        return;
+    }
+    
     if (state.isMusicPlaying) {
-        state.audioPlayer.pause();
-        state.isMusicPlaying = false;
+        pauseMusic();
         btn.textContent = '🔇 Musica OFF';
     } else {
-        state.audioPlayer.play();
-        state.isMusicPlaying = true;
+        resumeMusic();
         btn.textContent = '🔊 Musica ON';
+    }
+}
+
+function setMusicVolume(volume) {
+    if (youtubePlayer && typeof youtubePlayer.setVolume === 'function') {
+        youtubePlayer.setVolume(volume);
     }
 }
 
@@ -743,6 +862,12 @@ function showRecap() {
     document.getElementById('recap-streak').textContent = state.streak;
     
     renderWeekChart();
+    
+    const btnNewSession = document.getElementById('btn-new-session');
+    const btnResetAll = document.getElementById('btn-reset-all');
+    
+    btnNewSession.replaceWith(btnNewSession.cloneNode(true));
+    btnResetAll.replaceWith(btnResetAll.cloneNode(true));
     
     document.getElementById('btn-new-session').addEventListener('click', () => {
         state.selectedRitual = [];
