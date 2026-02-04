@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" style="display:none">
+  <defs>
+    <!-- FASE 1: SEMINA -->
+    <g id="student-phase-1">
+      <rect x="50" y="400" width="300" height="80" fill="#8B4513" rx="5"/>
+      <ellipse cx="200" cy="430" rx="15" ry="10" fill="#654321"/>
+      <!-- Vanga -->
+      <line x1="180" y1="410" x2="180" y2="380" stroke="#666" stroke-width="3"/>
+      <path d="M170,410 L180,380 L190,410 Z" fill="#888"/>
+    </g>
+    
+    <!-- FASE 2: INNAFFIATURA -->
+    <g id="student-phase-2">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <ellipse cx="200" cy="430" rx="15" ry="10" fill="#543210"/>
+      <!-- Gocce d'acqua -->
+      <ellipse cx="190" cy="400" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+      <ellipse cx="200" cy="405" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+      <ellipse cx="210" cy="400" rx="3" ry="5" fill="#4DA6FF" opacity="0.7"/>
+      <!-- Innaffiatoio (semplificato) -->
+      <path d="M240,360 L260,360 L260,380 L240,380 Z" fill="#4ECDC4"/>
+      <circle cx="250" cy="370" r="15" fill="#4ECDC4"/>
+      <path d="M235,375 L220,385 L220,395 L235,385 Z" fill="#4ECDC4"/>
+    </g>
+    
+    <!-- FASE 3: GERMOGLIO -->
+    <g id="student-phase-3">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo -->
+      <line x1="200" y1="430" x2="200" y2="380" stroke="#228B22" stroke-width="4"/>
+      <!-- Due foglioline -->
+      <ellipse cx="185" cy="390" rx="12" ry="8" fill="#32CD32" transform="rotate(-30 185 390)"/>
+      <ellipse cx="215" cy="390" rx="12" ry="8" fill="#32CD32" transform="rotate(30 215 390)"/>
+    </g>
+    
+    <!-- FASE 4: CRESCITA FOGLIE -->
+    <g id="student-phase-4">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo più alto -->
+      <line x1="200" y1="430" x2="200" y2="320" stroke="#228B22" stroke-width="5"/>
+      <!-- 6 foglie -->
+      <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+      <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+      <ellipse cx="175" cy="350" rx="15" ry="10" fill="#228B22" transform="rotate(-35 175 350)"/>
+      <ellipse cx="225" cy="350" rx="15" ry="10" fill="#228B22" transform="rotate(35 225 350)"/>
+      <ellipse cx="180" cy="325" rx="12" ry="8" fill="#32CD32" transform="rotate(-30 180 325)"/>
+      <ellipse cx="220" cy="325" rx="12" ry="8" fill="#32CD32" transform="rotate(30 220 325)"/>
+    </g>
+    
+    <!-- FASE 5: FIORITURA -->
+    <g id="student-phase-5">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo -->
+      <line x1="200" y1="430" x2="200" y2="280" stroke="#228B22" stroke-width="5"/>
+      <!-- Foglie -->
+      <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+      <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+      <ellipse cx="175" cy="340" rx="15" ry="10" fill="#228B22" transform="rotate(-35 175 340)"/>
+      <ellipse cx="225" cy="340" rx="15" ry="10" fill="#228B22" transform="rotate(35 225 340)"/>
+      <!-- Fiore giallo -->
+      <circle cx="200" cy="280" r="8" fill="#FFD700"/>
+      <circle cx="192" cy="275" r="6" fill="#FFEC8B"/>
+      <circle cx="208" cy="275" r="6" fill="#FFEC8B"/>
+      <circle cx="192" cy="285" r="6" fill="#FFEC8B"/>
+      <circle cx="208" cy="285" r="6" fill="#FFEC8B"/>
+      <circle cx="200" cy="280" r="4" fill="#FF8C00"/>
+    </g>
+    
+    <!-- FASE 6: POMODORO VERDE -->
+    <g id="student-phase-6">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo -->
+      <line x1="200" y1="430" x2="200" y2="260" stroke="#228B22" stroke-width="5"/>
+      <!-- Foglie ridotte -->
+      <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+      <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+      <!-- Pomodoro verde -->
+      <ellipse cx="200" cy="250" rx="35" ry="40" fill="#90EE90"/>
+      <ellipse cx="200" cy="240" rx="30" ry="25" fill="#7CCD7C"/>
+      <!-- Picciolo -->
+      <line x1="200" y1="210" x2="200" y2="230" stroke="#228B22" stroke-width="3"/>
+      <path d="M190,215 Q200,205 210,215" fill="none" stroke="#32CD32" stroke-width="2"/>
+    </g>
+    
+    <!-- FASE 7: POMODORO ROSSO -->
+    <g id="student-phase-7">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo -->
+      <line x1="200" y1="430" x2="200" y2="260" stroke="#228B22" stroke-width="5"/>
+      <!-- Foglie -->
+      <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+      <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+      <!-- Pomodoro ROSSO maturo -->
+      <ellipse cx="200" cy="250" rx="40" ry="45" fill="#FF6347"/>
+      <ellipse cx="200" cy="240" rx="35" ry="30" fill="#FF4500"/>
+      <!-- Highlights (lucidità) -->
+      <ellipse cx="185" cy="235" rx="12" ry="15" fill="#FF7F50" opacity="0.6"/>
+      <!-- Picciolo verde -->
+      <line x1="200" y1="205" x2="200" y2="225" stroke="#228B22" stroke-width="4"/>
+      <path d="M185,210 Q200,200 215,210" fill="none" stroke="#32CD32" stroke-width="3"/>
+      <path d="M190,212 L200,205 L210,212" fill="#32CD32"/>
+    </g>
+    
+    <!-- FASE 8: RACCOLTA (mano e cesto) -->
+    <g id="student-phase-8">
+      <rect x="50" y="400" width="300" height="80" fill="#654321" rx="5"/>
+      <!-- Stelo vuoto -->
+      <line x1="200" y1="430" x2="200" y2="280" stroke="#228B22" stroke-width="5"/>
+      <ellipse cx="180" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(-40 180 380)"/>
+      <ellipse cx="220" cy="380" rx="15" ry="10" fill="#32CD32" transform="rotate(40 220 380)"/>
+      <!-- Mano che tiene pomodoro (semplificata) -->
+      <ellipse cx="280" cy="300" rx="20" ry="25" fill="#FFD700"/>
+      <rect x="270" y="320" width="20" height="40" fill="#FFD700" rx="10"/>
+      <!-- Pomodoro nella mano -->
+      <ellipse cx="280" cy="290" rx="25" ry="28" fill="#FF6347"/>
+      <ellipse cx="280" cy="283" rx="20" ry="18" fill="#FF4500"/>
+    </g>
+  </defs>
+</svg>
