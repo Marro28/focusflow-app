@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <!-- POMO NEUTRO (base) -->
+    <g id="pomo-neutral">
+      <!-- Corpo pomodoro -->
+      <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+      <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+      <!-- Highlight -->
+      <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+      <!-- Picciolo -->
+      <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+      <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+      <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+      <!-- Occhi -->
+      <circle cx="85" cy="100" r="8" fill="#2C3E50"/>
+      <circle cx="115" cy="100" r="8" fill="#2C3E50"/>
+      <circle cx="87" cy="98" r="3" fill="white"/>
+      <circle cx="117" cy="98" r="3" fill="white"/>
+      <!-- Bocca neutra -->
+      <path d="M85,125 Q100,125 115,125" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    
+    <!-- POMO FELICE -->
+    <g id="pomo-happy">
+      <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+      <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+      <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+      <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+      <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+      <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+      <!-- Occhi felici (chiusi) -->
+      <path d="M77,100 Q85,95 93,100" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+      <path d="M107,100 Q115,95 123,100" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+      <!-- Sorriso grande -->
+      <path d="M80,120 Q100,135 120,120" fill="none" stroke="#2C3E50" stroke-width="4" stroke-linecap="round"/>
+    </g>
+    
+    <!-- POMO INCORAGGIANTE (con pollice su) -->
+    <g id="pomo-thumbsup">
+      <ellipse cx="100" cy="110" rx="55" ry="60" fill="#FF6347"/>
+      <ellipse cx="100" cy="100" rx="50" ry="50" fill="#FF4500"/>
+      <ellipse cx="80" cy="95" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+      <line x1="100" y1="50" x2="100" y2="70" stroke="#228B22" stroke-width="5"/>
+      <path d="M85,55 Q100,45 115,55" fill="none" stroke="#32CD32" stroke-width="3"/>
+      <path d="M90,57 L100,50 L110,57" fill="#32CD32"/>
+      <circle cx="85" cy="100" r="8" fill="#2C3E50"/>
+      <circle cx="115" cy="100" r="8" fill="#2C3E50"/>
+      <circle cx="87" cy="98" r="3" fill="white"/>
+      <circle cx="117" cy="98" r="3" fill="white"/>
+      <path d="M85,122 Q100,130 115,122" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+      <!-- Braccio con pollice su -->
+      <ellipse cx="155" cy="100" rx="12" ry="18" fill="#FF6347"/>
+      <rect x="145" y="80" width="10" height="25" fill="#FF6347" rx="5"/>
+    </g>
+    
+    <!-- POMO FIERO (con corona) -->
+    <g id="pomo-proud">
+      <ellipse cx="100" cy="120" rx="60" ry="65" fill="#FF6347"/>
+      <ellipse cx="100" cy="110" rx="55" ry="55" fill="#FF4500"/>
+      <ellipse cx="80" cy="105" rx="15" ry="20" fill="#FF7F50" opacity="0.6"/>
+      <line x1="100" y1="55" x2="100" y2="75" stroke="#228B22" stroke-width="5"/>
+      <path d="M85,60 Q100,50 115,60" fill="none" stroke="#32CD32" stroke-width="3"/>
+      <!-- CORONA -->
+      <rect x="70" y="45" width="60" height="12" fill="#FFD700"/>
+      <polygon points="75,45 80,35 85,45" fill="#FFD700"/>
+      <polygon points="95,45 100,30 105,45" fill="#FFD700"/>
+      <polygon points="115,45 120,35 125,45" fill="#FFD700"/>
+      <circle cx="100" cy="35" r="5" fill="#FF4500"/>
+      <path d="M77,110 Q85,105 93,110" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+      <path d="M107,110 Q115,105 123,110" fill="none" stroke="#2C3E50" stroke-width="3" stroke-linecap="round"/>
+      <path d="M85,130 Q100,142 115,130" fill="none" stroke="#2C3E50" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
