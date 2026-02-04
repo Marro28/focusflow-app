@@ -4,22 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FocusFlow - Anti-Procrastinazione</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Font studente -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font professionista -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-student.css" id="theme-student" disabled>
+    <link rel="stylesheet" href="style-professional.css" id="theme-professional" disabled>
 </head>
 <body>
+    <!-- Progress Tracker (appare dopo selezione profilo) -->
+    <div id="progress-tracker" class="progress-tracker" style="display: none;">
+        <div class="progress-step" data-step="1">
+            <span class="step-number">1</span>
+            <span class="step-label">Make it Obvious</span>
+        </div>
+        <div class="progress-step" data-step="2">
+            <span class="step-number">2</span>
+            <span class="step-label">Make it Easy</span>
+        </div>
+        <div class="progress-step" data-step="3">
+            <span class="step-number">3</span>
+            <span class="step-label">Make it Satisfying</span>
+        </div>
+    </div>
+
     <!-- SCHERMATA 1: Selezione Profilo -->
     <div id="screen-profile" class="screen active">
         <div class="container">
             <h1>Benvenuto in FocusFlow</h1>
             <p class="subtitle">Crea abitudini di lavoro solide, un pomodoro alla volta</p>
+            <p class="subtitle-small">Scegli il tuo stile</p>
             <div class="profile-selection">
-                <button class="profile-btn" data-profile="studente">
+                <button class="profile-btn" data-profile="student">
                     <span class="icon">📚</span>
-                    <span>Studente</span>
+                    <span class="profile-name">Studente</span>
+                    <span class="profile-desc">Design energico e motivante</span>
+                    <div class="profile-preview">
+                        <div class="preview-color color-student"></div>
+                    </div>
                 </button>
-                <button class="profile-btn" data-profile="professionista">
+                <button class="profile-btn" data-profile="professional">
                     <span class="icon">💼</span>
-                    <span>Professionista</span>
+                    <span class="profile-name">Professionista</span>
+                    <span class="profile-desc">Design minimal e produttivo</span>
+                    <div class="profile-preview">
+                        <div class="preview-color color-professional"></div>
+                    </div>
                 </button>
             </div>
         </div>
@@ -28,8 +62,10 @@
     <!-- SCHERMATA 2: Costruzione Rituale -->
     <div id="screen-ritual-builder" class="screen">
         <div class="container-wide">
-            <h2>Costruisci il tuo rituale pre-lavoro</h2>
-            <p class="subtitle">Scegli le azioni che prepareranno il tuo ambiente e la tua mente</p>
+            <div class="screen-header">
+                <h2>Make it Obvious</h2>
+                <p class="subtitle">Costruisci il tuo rituale pre-lavoro: rendi l'abitudine impossibile da ignorare</p>
+            </div>
             
             <div class="ritual-builder">
                 <!-- Colonna sinistra: Menu fisso consigliato -->
@@ -57,7 +93,7 @@
 
             <div class="navigation-buttons">
                 <button id="btn-back-profile" class="btn-secondary">← Cambia profilo</button>
-                <button id="btn-next-timer" class="btn-primary" disabled>Imposta il timer →</button>
+                <button id="btn-next-timer" class="btn-primary" disabled>Continua →</button>
             </div>
         </div>
     </div>
@@ -65,16 +101,18 @@
     <!-- SCHERMATA 3: Impostazioni Timer -->
     <div id="screen-timer-settings" class="screen">
         <div class="container">
-            <h2>Imposta il tuo timer Pomodoro</h2>
-            <p class="subtitle">Scegli la durata che funziona meglio per te</p>
+            <div class="screen-header">
+                <h2>Make it Easy</h2>
+                <p class="subtitle">Imposta il timer perfetto per te: riduci l'attrito, aumenta l'azione</p>
+            </div>
             
             <div class="timer-presets">
-                <h3>Preset consigliati</h3>
+                <h3>⚡ Preset consigliati</h3>
                 <div id="timer-presets-list"></div>
             </div>
 
             <div class="timer-custom">
-                <h3>Personalizza</h3>
+                <h3>🎛️ Personalizza</h3>
                 <div class="timer-inputs">
                     <div class="input-group">
                         <label>Lavoro (minuti)</label>
@@ -91,6 +129,37 @@
                 </div>
             </div>
 
+            <div class="music-selection">
+                <h3>🎵 Musica di concentrazione</h3>
+                <div class="music-options">
+                    <label class="music-option">
+                        <input type="radio" name="music" value="none" checked>
+                        <span>Nessuna musica</span>
+                    </label>
+                    <label class="music-option">
+                        <input type="radio" name="music" value="lofi">
+                        <span>Lofi Hip Hop</span>
+                    </label>
+                    <label class="music-option">
+                        <input type="radio" name="music" value="ambient">
+                        <span>Ambient</span>
+                    </label>
+                    <label class="music-option">
+                        <input type="radio" name="music" value="nature">
+                        <span>Suoni della natura</span>
+                    </label>
+                    <label class="music-option">
+                        <input type="radio" name="music" value="classical">
+                        <span>Classica</span>
+                    </label>
+                    <label class="music-option">
+                        <input type="radio" name="music" value="whitenoise">
+                        <span>White noise</span>
+                    </label>
+                </div>
+                <p class="helper-text">💡 La musica partirà all'inizio del timer</p>
+            </div>
+
             <div class="navigation-buttons">
                 <button id="btn-back-ritual" class="btn-secondary">← Modifica rituale</button>
                 <button id="btn-start-ritual" class="btn-primary">Inizia il rituale →</button>
@@ -101,8 +170,10 @@
     <!-- SCHERMATA 4: Esecuzione Rituale (Checklist) -->
     <div id="screen-ritual-execution" class="screen">
         <div class="container">
-            <h2>Completa il tuo rituale</h2>
-            <p class="subtitle">Spunta ogni azione prima di iniziare a lavorare</p>
+            <div class="screen-header">
+                <h2>Make it Obvious</h2>
+                <p class="subtitle">Completa il tuo rituale: ogni azione è un voto per il tipo di persona che vuoi diventare</p>
+            </div>
             
             <div class="ritual-checklist" id="ritual-checklist"></div>
 
@@ -128,7 +199,13 @@
 
             <div class="timer-display">
                 <div class="timer-phase" id="timer-phase">Sessione di lavoro</div>
-                <div class="timer-countdown" id="timer-countdown">25:00</div>
+                <div class="timer-visual">
+                    <svg class="timer-ring" width="300" height="300">
+                        <circle class="timer-ring-bg" cx="150" cy="150" r="140" />
+                        <circle class="timer-ring-progress" id="timer-ring-progress" cx="150" cy="150" r="140" />
+                    </svg>
+                    <div class="timer-countdown" id="timer-countdown">25:00</div>
+                </div>
                 <div class="timer-pomodoros">
                     <span id="pomodoro-count">0</span> 🍅 completati oggi
                 </div>
@@ -140,8 +217,13 @@
                 <button id="btn-stop" class="btn-danger">⏹️ Interrompi</button>
             </div>
 
+            <div class="music-controls" id="music-controls" style="display:none;">
+                <button id="btn-music-toggle" class="btn-music">🔊 Musica ON</button>
+                <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+            </div>
+
             <div class="current-task" id="current-task">
-                <p><strong>Task attuale:</strong> <span id="task-name">Lavoro in corso</span></p>
+                <p><strong>Focus:</strong> <span id="task-name">One pomodoro at a time</span></p>
             </div>
         </div>
     </div>
@@ -149,7 +231,16 @@
     <!-- SCHERMATA 6: Fine Sessione / Recap -->
     <div id="screen-recap" class="screen">
         <div class="container">
-            <h2>🎉 Ottimo lavoro!</h2>
+            <div class="screen-header">
+                <h2>Make it Satisfying</h2>
+                <p class="subtitle">Celebra il progresso: ogni ripetizione rafforza la tua identità</p>
+            </div>
+            
+            <div class="celebration" id="celebration">
+                <div class="celebration-emoji">🎉</div>
+                <h3>Ottimo lavoro!</h3>
+            </div>
+
             <div class="recap-stats">
                 <div class="stat-card">
                     <div class="stat-number" id="recap-pomodoros">0</div>
@@ -162,7 +253,7 @@
             </div>
 
             <div class="recap-chart">
-                <h3>Ultimi 7 giorni</h3>
+                <h3>📊 Ultimi 7 giorni</h3>
                 <div id="week-chart"></div>
             </div>
 
@@ -172,6 +263,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Audio players (nascosti) -->
+    <audio id="audio-player" loop></audio>
 
     <script src="app.js"></script>
 </body>
