@@ -1,4 +1,844 @@
 /* ============================================
+   RESET & BASE
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #2d3748;
+    overflow-x: hidden;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.container-wide {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ============================================
+   SCREENS
+   ============================================ */
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.screen.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.screen-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 1rem;
+}
+
+.subtitle-small {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 0.5rem;
+}
+
+/* ============================================
+   PROGRESS TRACKER
+   ============================================ */
+
+.progress-tracker {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.progress-step.active {
+    color: white;
+    transform: scale(1.1);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-number {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.step-label {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-music {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+    background: #e53e3e;
+    color: white;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+}
+
+.btn-danger:hover {
+    background: #c53030;
+    transform: translateY(-2px);
+}
+
+.btn-music {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.btn-music:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-large {
+    padding: 1.5rem 3rem;
+    font-size: 1.3rem;
+}
+
+/* ============================================
+   PROFILE SELECTION
+   ============================================ */
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.profile-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.profile-btn {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-btn:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.profile-btn .icon {
+    font-size: 4rem;
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.profile-desc {
+    font-size: 1rem;
+    color: #718096;
+}
+
+.profile-preview {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.preview-color {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.color-student {
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+}
+
+.color-professional {
+    background: linear-gradient(135deg, #2C3E50, #4A90E2);
+}
+
+/* ============================================
+   RITUAL BUILDER
+   ============================================ */
+
+.ritual-builder {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.menu-column,
+.ingredients-column,
+.cart-column {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.menu-column h3,
+.ingredients-column h3,
+.cart-column h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+}
+
+.helper-text {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-bottom: 1.5rem;
+}
+
+.ritual-item {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.ritual-item:hover {
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.ritual-item h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: #2d3748;
+}
+
+.ritual-item ul {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+.ritual-item ul li {
+    padding: 0.4rem 0;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.ritual-item ul li:before {
+    content: "✓ ";
+    color: #48bb78;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.ritual-item button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ritual-item button:hover {
+    background: #5568d3;
+}
+
+.ingredient-item {
+    background: #f7fafc;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    font-size: 0.95rem;
+    color: #2d3748;
+}
+
+.ingredient-item:hover {
+    background: #edf2f7;
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.ingredient-item.added {
+    background: #c6f6d5;
+    border-color: #48bb78;
+}
+
+.cart-item {
+    background: #f7fafc;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-item span {
+    flex: 1;
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.cart-item button {
+    padding: 0.5rem 1rem;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cart-item button:hover {
+    background: #c53030;
+}
+
+/* ============================================
+   TIMER SETTINGS
+   ============================================ */
+
+.timer-presets {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.timer-presets h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+
+#timer-presets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.preset-btn {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    text-align: center;
+}
+
+.preset-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-5px);
+}
+
+.preset-btn.active {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+.preset-btn h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+}
+
+.preset-btn p {
+    color: #718096;
+    font-size: 0.95rem;
+}
+
+.timer-custom {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.timer-custom h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+
+.timer-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.input-group input {
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.music-selection {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.music-selection h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+
+.music-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.music-option {
+    background: #f7fafc;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 2px solid transparent;
+}
+
+.music-option:hover {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+.music-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.music-option span {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* ============================================
+   RITUAL EXECUTION (CHECKLIST)
+   ============================================ */
+
+.ritual-checklist {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.checklist-item {
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.checklist-item:hover {
+    background: #edf2f7;
+    border-color: #667eea;
+}
+
+.checklist-item.completed {
+    background: #c6f6d5;
+    border-color: #48bb78;
+}
+
+.checklist-item input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.checklist-item label {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2d3748;
+    cursor: pointer;
+}
+
+.ritual-progress {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #e2e8f0;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+#ritual-progress-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* ============================================
+   TIMER SCREEN
+   ============================================ */
+
+.identity-banner {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.timer-display {
+    background: white;
+    padding: 3rem;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.timer-phase {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #718096;
+    margin-bottom: 2rem;
+}
+
+.timer-countdown {
+    font-size: 5rem;
+    font-weight: 800;
+    color: #2d3748;
+    margin: 2rem 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-pomodoros {
+    font-size: 1.3rem;
+    color: #718096;
+    font-weight: 600;
+}
+
+.timer-pomodoros span {
+    color: #e53e3e;
+    font-weight: 800;
+    font-size: 1.8rem;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.music-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.volume-slider {
+    width: 200px;
+    height: 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+    cursor: pointer;
+}
+
+.current-task {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.current-task p {
+    font-size: 1.1rem;
+    color: #2d3748;
+}
+
+/* ============================================
+   RECAP SCREEN
+   ============================================ */
+
+.celebration {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.celebration-emoji {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.celebration h3 {
+    font-size: 2rem;
+    color: white;
+    font-weight: 800;
+}
+
+.recap-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 4rem;
+    font-weight: 800;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #718096;
+    font-weight: 600;
+}
+
+.recap-chart {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 3rem;
+}
+
+.recap-chart h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+}
+
+#week-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 200px;
+    gap: 0.5rem;
+}
+
+.chart-bar {
+    flex: 1;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 8px 8px 0 0;
+    min-height: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+    transform: translateY(-5px);
+    filter: brightness(1.2);
+}
+
+.chart-bar-label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   NAVIGATION BUTTONS
+   ============================================ */
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ============================================
    POMO MASCOT - VERSIONE INTERATTIVA
    ============================================ */
 
@@ -38,7 +878,6 @@
     transform: scale(1.05) rotate(0deg);
 }
 
-/* Speech bubble */
 .pomo-speech {
     position: relative;
     background: white;
@@ -104,7 +943,6 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Pomo thinking dots */
 .pomo-thinking {
     display: flex;
     gap: 0.3rem;
@@ -139,7 +977,6 @@
     }
 }
 
-/* Click hint */
 .pomo-hint {
     position: absolute;
     bottom: -30px;
@@ -157,7 +994,6 @@
     50% { opacity: 1; }
 }
 
-/* Animazioni contestuali */
 .pomo-bounce {
     animation: pomo-bounce 0.6s ease;
 }
@@ -191,8 +1027,127 @@
     75% { transform: rotate(-10deg) scale(1.15); }
 }
 
-/* Responsive */
+/* ============================================
+   TOMATO GROWTH ANIMATION
+   ============================================ */
+
+.tomato-container {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+.tomato-growth {
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.8s ease;
+}
+
+.tomato-growth.fade-out {
+    opacity: 0;
+}
+
+.tomato-growth.fade-in {
+    opacity: 1;
+}
+
+@keyframes tomato-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.tomato-pulse {
+    animation: tomato-pulse 2s ease-in-out infinite;
+}
+
+@keyframes harvest-slide {
+    0% { transform: translateX(0) translateY(0); opacity: 1; }
+    50% { transform: translateX(80px) translateY(-20px); opacity: 1; }
+    100% { transform: translateX(150px) translateY(50px) scale(0.6); opacity: 0; }
+}
+
+.harvest-animation {
+    animation: harvest-slide 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.tomato-basket {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.tomato-basket:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+.basket-icon {
+    font-size: 2rem;
+}
+
+.basket-count {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+}
+
+.basket-label {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.9);
+}
+
+@keyframes confetti-student {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    animation: confetti-student 3s ease-out forwards;
+    z-index: 1000;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .ritual-builder {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .screen-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .timer-countdown {
+        font-size: 3.5rem;
+    }
+    
+    .profile-selection {
+        grid-template-columns: 1fr;
+    }
+    
     .pomo-container {
         top: auto;
         bottom: 80px;
@@ -208,15 +1163,23 @@
     .pomo-speech {
         max-width: 200px;
         padding: 1rem;
+    }
+    
+    .pomo-speech p {
         font-size: 0.9rem;
     }
-}
-
-/* Nascondi su schermate dove non serve */
-#screen-profile .pomo-container {
-    display: none;
-}
-
-#screen-timer .pomo-container {
-    display: none; /* Durante timer, Pomo è la pianta */
+    
+    .tomato-container {
+        width: 100%;
+        max-width: 350px;
+        height: 400px;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+    }
+    
+    .navigation-buttons button {
+        width: 100%;
+    }
 }
