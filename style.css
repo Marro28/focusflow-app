@@ -6,11 +6,10 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     color: #2d3748;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 /* Schermate e transizioni */
@@ -18,18 +17,77 @@ body {
     display: none;
     min-height: 100vh;
     padding: 2rem;
-    animation: fadeIn 0.4s ease;
+    position: relative;
 }
 
 .screen.active {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: fadeIn 0.5s ease;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Progress Tracker */
+.progress-tracker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.progress-step.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.progress-step.active .step-number {
+    background: var(--primary-color);
+    color: white;
+}
+
+.step-label {
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 /* Container */
@@ -37,33 +95,47 @@ body {
     background: white;
     padding: 3rem;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    max-width: 700px;
     width: 100%;
+    position: relative;
 }
 
 .container-wide {
     background: white;
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     max-width: 1200px;
     width: 100%;
 }
 
+.screen-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 h1, h2, h3 {
     color: #1a202c;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 h1 { font-size: 2.5rem; text-align: center; }
-h2 { font-size: 2rem; text-align: center; }
+h2 { font-size: 2rem; }
 h3 { font-size: 1.3rem; }
 
 .subtitle {
     text-align: center;
     color: #718096;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+}
+
+.subtitle-small {
+    text-align: center;
+    color: #a0aec0;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Selezione profilo */
@@ -75,28 +147,64 @@ h3 { font-size: 1.3rem; }
 
 .profile-btn {
     flex: 1;
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     border: 3px solid #e2e8f0;
     background: white;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    font-size: 1.2rem;
-    font-weight: 600;
+    position: relative;
+    overflow: hidden;
 }
 
 .profile-btn:hover {
-    border-color: #667eea;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
 .profile-btn .icon {
-    font-size: 3rem;
+    font-size: 3.5rem;
+    transition: transform 0.3s ease;
+}
+
+.profile-btn:hover .icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.profile-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.profile-desc {
+    font-size: 0.9rem;
+    color: #718096;
+    text-align: center;
+}
+
+.profile-preview {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.preview-color {
+    width: 40px;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.color-student {
+    background: linear-gradient(90deg, #FF6B35, #F7931E, #4ECDC4);
+}
+
+.color-professional {
+    background: linear-gradient(90deg, #1A2332, #4A90E2, #10B981);
 }
 
 /* Costruzione rituale - layout a 3 colonne */
@@ -124,41 +232,35 @@ h3 { font-size: 1.3rem; }
 .ritual-item, .ingredient-item, .cart-item {
     background: white;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 0.75rem;
     border: 2px solid #e2e8f0;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ritual-item:hover, .ingredient-item:hover {
-    border-color: #667eea;
-    transform: translateX(5px);
+.ingredient-item {
+    cursor: pointer;
+}
+
+.ingredient-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .ritual-item {
     cursor: default;
 }
 
-.ritual-item:hover {
-    transform: none;
-    border-color: #e2e8f0;
-}
-
 .ritual-item button {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     width: 100%;
-    padding: 0.5rem;
-    background: #667eea;
-    color: white;
+    padding: 0.6rem;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
-}
-
-.ritual-item button:hover {
-    background: #5568d3;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .ritual-item h4 {
@@ -174,17 +276,19 @@ h3 { font-size: 1.3rem; }
     padding-left: 0;
 }
 
+.ritual-item ul li {
+    margin-bottom: 0.25rem;
+}
+
 .ritual-item ul li:before {
     content: "• ";
-    color: #667eea;
     font-weight: bold;
+    margin-right: 0.25rem;
 }
 
 .ingredient-item.added {
-    background: #c3dafe;
-    border-color: #667eea;
+    opacity: 0.5;
     cursor: not-allowed;
-    opacity: 0.6;
 }
 
 .cart-item {
@@ -197,46 +301,47 @@ h3 { font-size: 1.3rem; }
     background: #fc8181;
     color: white;
     border: none;
-    padding: 0.3rem 0.7rem;
-    border-radius: 5px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .cart-item button:hover {
     background: #f56565;
+    transform: scale(1.05);
 }
 
 #cart-count {
-    font-weight: 600;
-    color: #667eea;
+    font-weight: 700;
 }
 
 /* Bottoni */
-.btn-primary, .btn-secondary, .btn-danger {
+.btn-primary, .btn-secondary, .btn-danger, .btn-music {
     padding: 0.75rem 2rem;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-primary {
-    background: #667eea;
-    color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #5568d3;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(-1px);
 }
 
 .btn-primary:disabled {
     background: #cbd5e0;
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .btn-secondary {
@@ -246,6 +351,7 @@ h3 { font-size: 1.3rem; }
 
 .btn-secondary:hover {
     background: #cbd5e0;
+    transform: translateY(-2px);
 }
 
 .btn-danger {
@@ -255,10 +361,11 @@ h3 { font-size: 1.3rem; }
 
 .btn-danger:hover {
     background: #f56565;
+    transform: translateY(-2px);
 }
 
 .btn-large {
-    padding: 1.2rem 3rem;
+    padding: 1.3rem 3rem;
     font-size: 1.2rem;
     width: 100%;
     margin-top: 1.5rem;
@@ -267,7 +374,7 @@ h3 { font-size: 1.3rem; }
 .navigation-buttons {
     display: flex;
     justify-content: space-between;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     gap: 1rem;
 }
 
@@ -287,15 +394,15 @@ h3 { font-size: 1.3rem; }
     padding: 1.5rem;
     background: #f7fafc;
     border: 2px solid #e2e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
 }
 
-.preset-btn:hover, .preset-btn.active {
-    border-color: #667eea;
-    background: #edf2f7;
+.preset-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 .preset-btn h4 {
@@ -332,13 +439,60 @@ h3 { font-size: 1.3rem; }
     width: 100%;
     padding: 0.75rem;
     border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Music selection */
+.music-selection {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e2e8f0;
+}
+
+.music-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.music-option {
+    padding: 1rem;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.music-option:hover {
+    background: #edf2f7;
+    transform: translateY(-2px);
+}
+
+.music-option input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.music-option input[type="radio"]:checked + span {
+    font-weight: 700;
+}
+
+.music-option span {
+    font-size: 0.95rem;
 }
 
 /* Checklist rituale */
@@ -349,27 +503,33 @@ h3 { font-size: 1.3rem; }
 .checklist-item {
     display: flex;
     align-items: center;
-    padding: 1.2rem;
+    padding: 1.3rem;
     background: #f7fafc;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid #e2e8f0;
 }
 
 .checklist-item:hover {
     background: #edf2f7;
+    transform: translateX(8px);
 }
 
 .checklist-item.completed {
-    background: #c6f6d5;
-    border-color: #48bb78;
+    animation: checkPop 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes checkPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .checklist-item input[type="checkbox"] {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     margin-right: 1rem;
     cursor: pointer;
 }
@@ -380,35 +540,35 @@ h3 { font-size: 1.3rem; }
 
 .progress-bar {
     width: 100%;
-    height: 20px;
+    height: 24px;
     background: #e2e8f0;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    transition: width 0.5s ease;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     width: 0%;
 }
 
 #ritual-progress-text {
     text-align: center;
-    margin-top: 0.5rem;
-    font-weight: 600;
+    margin-top: 0.75rem;
+    font-weight: 700;
     color: #4a5568;
+    font-size: 1.05rem;
 }
 
 /* Timer Display */
 .identity-banner {
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 1rem;
+    padding: 1.2rem;
     text-align: center;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    font-weight: 600;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .timer-display {
@@ -417,23 +577,52 @@ h3 { font-size: 1.3rem; }
 }
 
 .timer-phase {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #4a5568;
-    margin-bottom: 1rem;
-    font-weight: 600;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.timer-visual {
+    position: relative;
+    display: inline-block;
+    margin: 2rem 0;
+}
+
+.timer-ring {
+    transform: rotate(-90deg);
+}
+
+.timer-ring-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 12;
+}
+
+.timer-ring-progress {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 880;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
 }
 
 .timer-countdown {
-    font-size: 5rem;
-    font-weight: bold;
-    color: #667eea;
-    margin: 1rem 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
 }
 
 .timer-pomodoros {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #4a5568;
+    font-weight: 600;
+    margin-top: 1rem;
 }
 
 .timer-controls {
@@ -443,11 +632,82 @@ h3 { font-size: 1.3rem; }
     margin: 2rem 0;
 }
 
+.music-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 12px;
+}
+
+.btn-music {
+    background: #4a5568;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-music:hover {
+    background: #2d3748;
+}
+
+.volume-slider {
+    width: 200px;
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: none;
+}
+
 .current-task {
     background: #f7fafc;
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: center;
+    margin-top: 2rem;
+}
+
+/* Celebration */
+.celebration {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.celebration-emoji {
+    font-size: 5rem;
+    animation: celebrate 1s ease infinite alternate;
+}
+
+@keyframes celebrate {
+    0% { transform: scale(1) rotate(-5deg); }
+    100% { transform: scale(1.1) rotate(5deg); }
+}
+
+.celebration h3 {
+    margin-top: 1rem;
+    font-size: 1.8rem;
 }
 
 /* Recap */
@@ -459,81 +719,35 @@ h3 { font-size: 1.3rem; }
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 2rem;
-    border-radius: 15px;
+    padding: 2.5rem;
+    border-radius: 16px;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
 }
 
 .stat-number {
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
 }
 
 .stat-label {
     font-size: 1.1rem;
-    opacity: 0.9;
+    opacity: 0.95;
+    font-weight: 600;
 }
 
 .recap-chart {
-    margin: 2rem 0;
-    padding: 1.5rem;
+    margin: 2.5rem 0;
+    padding: 2rem;
     background: #f7fafc;
-    border-radius: 10px;
+    border-radius: 16px;
 }
 
 #week-chart {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    height: 150px;
-    margin-top: 1rem;
-}
-
-.chart-bar {
-    flex: 1;
-    margin: 0 0.25rem;
-    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    border-radius: 5px 5px 0 0;
-    position: relative;
-    transition: all 0.3s ease;
-    min-height: 10px;
-}
-
-.chart-bar:hover {
-    opacity: 0.8;
-}
-
-.chart-bar-label {
-    position: absolute;
-    bottom: -25px;
-    width: 100%;
-    text-align: center;
-    font-size: 0.75rem;
-    color: #718096;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .ritual-builder {
-        grid-template-columns: 1fr;
-    }
-    
-    .timer-inputs {
-        grid-template-columns: 1fr;
-    }
-    
-    .profile-selection {
-        flex-direction: column;
-    }
-    
-    .navigation-buttons {
-        flex-direction: column;
-    }
-    
-    .timer-countdown {
-        font-size: 3.5rem;
-    }
-}
+    dis
