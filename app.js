@@ -21,18 +21,15 @@ let state = {
     timerInterval: null,
     dailyPomodoros: [],
     streak: 0,
-    isMusicPlaying: false
+    isMusicPlaying: false,
+    currentGrowthPhase: 1
 };
-
-// ============================================
-// YOUTUBE PLAYER VARIABLES
-// ============================================
 
 let youtubePlayer = null;
 let isYouTubeAPIReady = false;
 
 // ============================================
-// DATA: Rituali e Ingredienti
+// DATA
 // ============================================
 
 const ritualTemplates = {
@@ -94,6 +91,18 @@ const timerPresets = {
     ]
 };
 
+// Fasi crescita: percentuali del tempo in cui cambia fase
+const growthPhases = [
+    { phase: 1, percent: 0, name: "semina" },       // 0%
+    { phase: 2, percent: 0.01, name: "innaffiatura" }, // dopo 10 sec
+    { phase: 3, percent: 0.20, name: "germoglio" }, // 20%
+    { phase: 4, percent: 0.40, name: "crescita" },  // 40%
+    { phase: 5, percent: 0.60, name: "fioritura" }, // 60%
+    { phase: 6, percent: 0.80, name: "verde" },     // 80%
+    { phase: 7, percent: 0.96, name: "maturo" },    // 96%
+    { phase: 8, percent: 1.0, name: "raccolta" }    // 100%
+];
+
 // ============================================
 // UTILITY FUNCTIONS
 // ============================================
@@ -104,6 +113,68 @@ function showScreen(screenId) {
     });
     document.getElementById(screenId).classList.add('active');
     updateProgressTracker(screenId);
+    
+    // Mostra Pomo guida dove appropriato
+    showPomoGuide(screenId);
+}
+
+function showPomoGuide(screenId) {
+    const pomoGuide = document.getElementById('pomo-guide');
+    if (!pomoGuide) return;
+    
+    const messages = {
+        'screen-profile': { show: false },
+        'screen-ritual-builder': { 
+            show: true, 
+            mascot: 'pomo-happy',
+            text: state.profile === 'student' ? 
+                "Scegli gli ingredienti per il tuo rituale perfetto! 🎯" : 
+                "Costruisci il sistema che ti porta al successo. Precisione prima di tutto."
+        },
+        'screen-timer-settings': { 
+            show: true, 
+            mascot: 'pomo-neutral',
+            text: state.profile === 'student' ? 
+                "Quale ritmo funziona meglio per te? 🎵" : 
+                "Ottimizza i parametri per massima produttività."
+        },
+        'screen-ritual-execution': { 
+            show: true, 
+            mascot: 'pomo-thumbsup',
+            text: state.profile === 'student' ? 
+                "Completa ogni passo, io aspetto qui! 💪" : 
+                "Esegui il protocollo. Io monitoro il processo."
+        },
+        'screen-timer': { show: false }, // Durante timer, Pomo è la pianta
+        'screen-recap': { 
+            show: true, 
+            mascot: 'pomo-proud',
+            text: state.profile === 'student' ? 
+                "WOW! Guarda quanti frutti hai raccolto! 🎉" : 
+                "Risultati tangibili. Progressione costante."
+        }
+    };
+    
+    const config = messages[screenId];
+    
+    if (config && config.show) {
+        pomoGuide.style.display = 'flex';
+        updatePomoMascot(config.mascot, config.text);
+    } else {
+        pomoGuide.style.display = 'none';
+    }
+}
+
+function updatePomoMascot(mascotType, text) {
+    const pomoSvg = document.querySelector('#pomo-guide svg use');
+    const pomoText = document.querySelector('#pomo-guide .pomo-speech p');
+    
+    if (pomoSvg) {
+        pomoSvg.setAttribute('href', `#${mascotType}`);
+    }
+    if (pomoText) {
+        pomoText.textContent = text;
+    }
 }
 
 function updateProgressTracker(screenId) {
@@ -201,6 +272,98 @@ function loadTheme(profile) {
     } else {
         studentCSS.disabled = true;
         professionalCSS.disabled = false;
+    }
+}
+
+// ============================================
+// TOMATO GROWTH ANIMATION
+// ============================================
+
+function initTomatoGrowth() {
+    const container = document.querySelector('.tomato-container');
+    if (!container) {
+        console.error('Tomato container not found');
+        return;
+    }
+    
+    // Crea SVG container
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'tomato-growth');
+    svg.setAttribute('viewBox', '0 0 400 500');
+    svg.setAttribute('width', '400');
+    svg.setAttribute('height', '500');
+    
+    // Crea use element
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    const prefix = state.profile === 'student' ? 'student' : 'pro';
+    use.setAttribute('href', `#${prefix}-phase-1`);
+    
+    svg.appendChild(use);
+    container.appendChild(svg);
+    
+    state.currentGrowthPhase = 1;
+}
+
+function updateTomatoGrowth() {
+    const progress = 1 - (state.timeRemaining / state.totalTime);
+    
+    // Trova la fase corretta
+    let targetPhase = 1;
+    for (let i = 0; i < growthPhases.length; i++) {
+        if (progress >= growthPhases[i].percent) {
+            targetPhase = growthPhases[i].phase;
+        }
+    }
+    
+    // Se cambia fase, aggiorna SVG
+    if (targetPhase !== state.currentGrowthPhase) {
+        state.currentGrowthPhase = targetPhase;
+        const use = document.querySelector('.tomato-growth use');
+        const prefix = state.profile === 'student' ? 'student' : 'pro';
+        
+        if (use) {
+            // Animazione fade
+            const svg = document.querySelector('.tomato-growth');
+            svg.classList.add('fade-out');
+            
+            setTimeout(() => {
+                use.setAttribute('href', `#${prefix}-phase-${targetPhase}`);
+                svg.classList.remove('fade-out');
+                svg.classList.add('fade-in');
+                
+                // Pulse animation per fase matura
+                if (targetPhase === 7) {
+                    svg.classList.add('tomato-pulse');
+                }
+                
+                setTimeout(() => svg.classList.remove('fade-in'), 800);
+            }, 400);
+        }
+    }
+}
+
+function animateHarvest() {
+    const svg = document.querySelector('.tomato-growth');
+    if (svg) {
+        svg.classList.add('harvest-animation');
+        
+        setTimeout(() => {
+            addTomatoToBasket();
+        }, 1000);
+    }
+}
+
+function addTomatoToBasket() {
+    const basket = document.querySelector('.basket-count');
+    if (basket) {
+        basket.textContent = state.pomodorosCompleted;
+        
+        // Animazione bounce del cesto
+        const basketContainer = document.querySelector('.tomato-basket');
+        basketContainer.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            basketContainer.style.transform = 'scale(1)';
+        }, 300);
     }
 }
 
@@ -444,19 +607,22 @@ function startTimer() {
     state.pomodorosCompleted = getTodayPomodoros();
     state.pomodorosThisSession = 0;
     
+    // Inizializza crescita pomodoro
+    initTomatoGrowth();
+    
     updateTimerDisplay();
-    updateTimerRing();
     updateIdentityBanner();
     updatePomodoroCount();
     
-    // Avvia musica se selezionata
+    // Mostra cesto
+    document.querySelector('.tomato-basket').style.display = 'flex';
+    
     if (state.musicChoice !== 'none') {
         startMusic();
     }
     
     state.timerInterval = setInterval(tick, 1000);
     
-    // Event listeners per controlli timer
     const btnPause = document.getElementById('btn-pause');
     const btnResume = document.getElementById('btn-resume');
     const btnStop = document.getElementById('btn-stop');
@@ -469,7 +635,6 @@ function startTimer() {
     document.getElementById('btn-resume').addEventListener('click', resumeTimer);
     document.getElementById('btn-stop').addEventListener('click', stopTimer);
     
-    // Music controls
     if (state.musicChoice !== 'none') {
         setupMusicControls();
     }
@@ -497,7 +662,7 @@ function tick() {
     if (!state.isPaused && state.timeRemaining > 0) {
         state.timeRemaining--;
         updateTimerDisplay();
-        updateTimerRing();
+        updateTomatoGrowth(); // Aggiorna crescita pianta
     } else if (state.timeRemaining === 0) {
         handlePhaseComplete();
     }
@@ -514,37 +679,42 @@ function handlePhaseComplete() {
         updatePomodoroCount();
         updateIdentityBanner();
         
+        // Animazione raccolta
+        animateHarvest();
+        
         if (state.profile === 'student') {
             createConfetti();
         }
         
-        if (state.pomodorosThisSession % 4 === 0) {
-            const wantsLongBreak = confirm('🎉 Hai completato 4 pomodori! Vuoi fare una pausa lunga?');
-            if (wantsLongBreak) {
-                startBreak('longBreak');
-            } else {
-                const continueWorking = confirm('Vuoi continuare con un altro pomodoro?');
-                if (continueWorking) {
-                    startWorkSession();
+        setTimeout(() => {
+            if (state.pomodorosThisSession % 4 === 0) {
+                const wantsLongBreak = confirm('🎉 Hai completato 4 pomodori! Vuoi fare una pausa lunga?');
+                if (wantsLongBreak) {
+                    startBreak('longBreak');
                 } else {
-                    stopMusic();
-                    showRecap();
+                    const continueWorking = confirm('Vuoi continuare con un altro pomodoro?');
+                    if (continueWorking) {
+                        startWorkSession();
+                    } else {
+                        stopMusic();
+                        showRecap();
+                    }
+                }
+            } else {
+                const wantsShortBreak = confirm('✅ Pomodoro completato! Vuoi fare una pausa breve?');
+                if (wantsShortBreak) {
+                    startBreak('shortBreak');
+                } else {
+                    const continueWorking = confirm('Vuoi continuare con un altro pomodoro?');
+                    if (continueWorking) {
+                        startWorkSession();
+                    } else {
+                        stopMusic();
+                        showRecap();
+                    }
                 }
             }
-        } else {
-            const wantsShortBreak = confirm('✅ Pomodoro completato! Vuoi fare una pausa breve?');
-            if (wantsShortBreak) {
-                startBreak('shortBreak');
-            } else {
-                const continueWorking = confirm('Vuoi continuare con un altro pomodoro?');
-                if (continueWorking) {
-                    startWorkSession();
-                } else {
-                    stopMusic();
-                    showRecap();
-                }
-            }
-        }
+        }, 2000);
     } else {
         const continueWorking = confirm('⏰ Pausa terminata! Pronto per il prossimo pomodoro?');
         if (continueWorking) {
@@ -560,6 +730,12 @@ function startWorkSession() {
     state.currentPhase = 'work';
     state.timeRemaining = state.timerSettings.work * 60;
     state.totalTime = state.timeRemaining;
+    
+    // Reset crescita
+    const container = document.querySelector('.tomato-container');
+    container.innerHTML = '';
+    initTomatoGrowth();
+    
     updateTimerDisplay();
     
     if (youtubePlayer && state.musicChoice !== 'none') {
@@ -574,6 +750,13 @@ function startBreak(type) {
     const duration = type === 'longBreak' ? state.timerSettings.longBreak : state.timerSettings.shortBreak;
     state.timeRemaining = duration * 60;
     state.totalTime = state.timeRemaining;
+    
+    // Nascondi pianta durante pausa
+    const container = document.querySelector('.tomato-container');
+    if (container) {
+        container.style.opacity = '0.3';
+    }
+    
     updateTimerDisplay();
     
     if (youtubePlayer && state.isMusicPlaying) {
@@ -622,14 +805,6 @@ function updateTimerDisplay() {
     document.getElementById('timer-countdown').textContent = formatTime(state.timeRemaining);
 }
 
-function updateTimerRing() {
-    const ring = document.getElementById('timer-ring-progress');
-    const circumference = 2 * Math.PI * 140;
-    const progress = state.timeRemaining / state.totalTime;
-    const offset = circumference * (1 - progress);
-    ring.style.strokeDashoffset = offset;
-}
-
 function updatePomodoroCount() {
     document.getElementById('pomodoro-count').textContent = state.pomodorosCompleted;
 }
@@ -650,21 +825,25 @@ function updateIdentityBanner() {
 }
 
 function playSound() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.value = 800;
-    oscillator.type = 'sine';
-    
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch(e) {
+        console.log('Sound not available');
+    }
 }
 
 // ============================================
@@ -685,7 +864,6 @@ function loadYouTubeAPI() {
 
 window.onYouTubeIframeAPIReady = function() {
     isYouTubeAPIReady = true;
-    console.log('YouTube API pronta');
 };
 
 function startMusic() {
@@ -722,7 +900,6 @@ function createYouTubePlayer() {
     const videoId = getYouTubeVideoId(state.musicChoice);
     
     if (!videoId) {
-        console.error('Video ID non valido');
         return;
     }
     
@@ -753,8 +930,6 @@ function onPlayerReady(event) {
     event.target.setVolume(50);
     event.target.playVideo();
     state.isMusicPlaying = true;
-    
-    console.log('Player YouTube pronto e avviato');
 }
 
 function onPlayerStateChange(event) {
@@ -771,7 +946,6 @@ function onPlayerStateChange(event) {
 
 function onPlayerError(event) {
     console.error('Errore YouTube Player:', event.data);
-    alert('Errore nel caricamento della musica. Verifica la connessione internet.');
 }
 
 function getYouTubeVideoId(musicType) {
@@ -811,7 +985,6 @@ function toggleMusic() {
     const btn = document.getElementById('btn-music-toggle');
     
     if (!youtubePlayer) {
-        console.error('Player non inizializzato');
         return;
     }
     
@@ -831,7 +1004,7 @@ function setMusicVolume(volume) {
 }
 
 // ============================================
-// CONFETTI (Studenti only)
+// CONFETTI
 // ============================================
 
 function createConfetti() {
@@ -841,6 +1014,7 @@ function createConfetti() {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
             confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
             confetti.style.animationDelay = Math.random() * 0.5 + 's';
             document.body.appendChild(confetti);
@@ -920,4 +1094,40 @@ function renderWeekChart() {
 document.addEventListener('DOMContentLoaded', () => {
     loadState();
     initProfileSelection();
+    
+    // Crea Pomo guida (nascosto inizialmente)
+    createPomoGuideElement();
+    
+    // Crea basket (nascosto inizialmente)
+    createBasketElement();
 });
+
+function createPomoGuideElement() {
+    const pomoGuide = document.createElement('div');
+    pomoGuide.id = 'pomo-guide';
+    pomoGuide.className = 'pomo-guide';
+    pomoGuide.style.display = 'none';
+    pomoGuide.innerHTML = `
+        <svg class="pomo-mascot" viewBox="0 0 200 200">
+            <use href="#pomo-neutral"></use>
+        </svg>
+        <div class="pomo-speech">
+            <p>Ciao! Sono Pomo, il tuo compagno di crescita!</p>
+        </div>
+    `;
+    document.body.appendChild(pomoGuide);
+}
+
+function createBasketElement() {
+    const basket = document.createElement('div');
+    basket.className = 'tomato-basket';
+    basket.style.display = 'none';
+    basket.innerHTML = `
+        <div class="basket-icon">🧺</div>
+        <div>
+            <div class="basket-count">0</div>
+            <div class="basket-label">raccolti oggi</div>
+        </div>
+    `;
+    document.body.appendChild(basket);
+}
