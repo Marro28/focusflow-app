@@ -1,0 +1,539 @@
+/* Reset e base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #2d3748;
+    line-height: 1.6;
+}
+
+/* Schermate e transizioni */
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: 2rem;
+    animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Container */
+.container {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 600px;
+    width: 100%;
+}
+
+.container-wide {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 1200px;
+    width: 100%;
+}
+
+h1, h2, h3 {
+    color: #1a202c;
+    margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.5rem; text-align: center; }
+h2 { font-size: 2rem; text-align: center; }
+h3 { font-size: 1.3rem; }
+
+.subtitle {
+    text-align: center;
+    color: #718096;
+    margin-bottom: 2rem;
+}
+
+/* Selezione profilo */
+.profile-selection {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.profile-btn {
+    flex: 1;
+    padding: 2rem;
+    border: 3px solid #e2e8f0;
+    background: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.profile-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.profile-btn .icon {
+    font-size: 3rem;
+}
+
+/* Costruzione rituale - layout a 3 colonne */
+.ritual-builder {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.menu-column, .ingredients-column, .cart-column {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    min-height: 400px;
+}
+
+.helper-text {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-bottom: 1rem;
+}
+
+/* Items nelle colonne */
+.ritual-item, .ingredient-item, .cart-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    border: 2px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ritual-item:hover, .ingredient-item:hover {
+    border-color: #667eea;
+    transform: translateX(5px);
+}
+
+.ritual-item {
+    cursor: default;
+}
+
+.ritual-item:hover {
+    transform: none;
+    border-color: #e2e8f0;
+}
+
+.ritual-item button {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.ritual-item button:hover {
+    background: #5568d3;
+}
+
+.ritual-item h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+}
+
+.ritual-item ul {
+    list-style: none;
+    font-size: 0.85rem;
+    color: #4a5568;
+    padding-left: 0;
+}
+
+.ritual-item ul li:before {
+    content: "• ";
+    color: #667eea;
+    font-weight: bold;
+}
+
+.ingredient-item.added {
+    background: #c3dafe;
+    border-color: #667eea;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-item button {
+    background: #fc8181;
+    color: white;
+    border: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.cart-item button:hover {
+    background: #f56565;
+}
+
+#cart-count {
+    font-weight: 600;
+    color: #667eea;
+}
+
+/* Bottoni */
+.btn-primary, .btn-secondary, .btn-danger {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #2d3748;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e0;
+}
+
+.btn-danger {
+    background: #fc8181;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #f56565;
+}
+
+.btn-large {
+    padding: 1.2rem 3rem;
+    font-size: 1.2rem;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+/* Timer settings */
+.timer-presets {
+    margin: 2rem 0;
+}
+
+#timer-presets-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.preset-btn {
+    padding: 1.5rem;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.preset-btn:hover, .preset-btn.active {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+.preset-btn h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.preset-btn p {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.timer-custom {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #e2e8f0;
+}
+
+.timer-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Checklist rituale */
+.ritual-checklist {
+    margin: 2rem 0;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    background: #f7fafc;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+}
+
+.checklist-item:hover {
+    background: #edf2f7;
+}
+
+.checklist-item.completed {
+    background: #c6f6d5;
+    border-color: #48bb78;
+}
+
+.checklist-item input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.ritual-progress {
+    margin: 2rem 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+#ritual-progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+/* Timer Display */
+.identity-banner {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.timer-display {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.timer-phase {
+    font-size: 1.5rem;
+    color: #4a5568;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.timer-countdown {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin: 1rem 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-pomodoros {
+    font-size: 1.3rem;
+    color: #4a5568;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.current-task {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Recap */
+.recap-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.recap-chart {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f7fafc;
+    border-radius: 10px;
+}
+
+#week-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 150px;
+    margin-top: 1rem;
+}
+
+.chart-bar {
+    flex: 1;
+    margin: 0 0.25rem;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 10px;
+}
+
+.chart-bar:hover {
+    opacity: 0.8;
+}
+
+.chart-bar-label {
+    position: absolute;
+    bottom: -25px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #718096;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ritual-builder {
+        grid-template-columns: 1fr;
+    }
+    
+    .timer-inputs {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-selection {
+        flex-direction: column;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+    }
+    
+    .timer-countdown {
+        font-size: 3.5rem;
+    }
+}

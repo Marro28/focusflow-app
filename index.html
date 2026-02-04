@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow - Anti-Procrastinazione</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- SCHERMATA 1: Selezione Profilo -->
+    <div id="screen-profile" class="screen active">
+        <div class="container">
+            <h1>Benvenuto in FocusFlow</h1>
+            <p class="subtitle">Crea abitudini di lavoro solide, un pomodoro alla volta</p>
+            <div class="profile-selection">
+                <button class="profile-btn" data-profile="studente">
+                    <span class="icon">📚</span>
+                    <span>Studente</span>
+                </button>
+                <button class="profile-btn" data-profile="professionista">
+                    <span class="icon">💼</span>
+                    <span>Professionista</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHERMATA 2: Costruzione Rituale -->
+    <div id="screen-ritual-builder" class="screen">
+        <div class="container-wide">
+            <h2>Costruisci il tuo rituale pre-lavoro</h2>
+            <p class="subtitle">Scegli le azioni che prepareranno il tuo ambiente e la tua mente</p>
+            
+            <div class="ritual-builder">
+                <!-- Colonna sinistra: Menu fisso consigliato -->
+                <div class="menu-column">
+                    <h3>🍽️ Menu consigliato</h3>
+                    <p class="helper-text">Rituali pronti per te</p>
+                    <div id="recommended-rituals"></div>
+                </div>
+
+                <!-- Colonna centrale: Ingredienti individuali -->
+                <div class="ingredients-column">
+                    <h3>🛒 Ingredienti disponibili</h3>
+                    <p class="helper-text">Aggiungi al tuo carrello</p>
+                    <div id="ingredients-list"></div>
+                </div>
+
+                <!-- Colonna destra: Carrello -->
+                <div class="cart-column">
+                    <h3>✅ Il tuo carrello</h3>
+                    <p class="helper-text" id="cart-count">0 azioni selezionate</p>
+                    <div id="cart-items"></div>
+                    <button id="btn-add-custom" class="btn-secondary">+ Aggiungi azione personalizzata</button>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="btn-back-profile" class="btn-secondary">← Cambia profilo</button>
+                <button id="btn-next-timer" class="btn-primary" disabled>Imposta il timer →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHERMATA 3: Impostazioni Timer -->
+    <div id="screen-timer-settings" class="screen">
+        <div class="container">
+            <h2>Imposta il tuo timer Pomodoro</h2>
+            <p class="subtitle">Scegli la durata che funziona meglio per te</p>
+            
+            <div class="timer-presets">
+                <h3>Preset consigliati</h3>
+                <div id="timer-presets-list"></div>
+            </div>
+
+            <div class="timer-custom">
+                <h3>Personalizza</h3>
+                <div class="timer-inputs">
+                    <div class="input-group">
+                        <label>Lavoro (minuti)</label>
+                        <input type="number" id="work-duration" min="5" max="90" value="25">
+                    </div>
+                    <div class="input-group">
+                        <label>Pausa breve (minuti)</label>
+                        <input type="number" id="short-break" min="1" max="15" value="5">
+                    </div>
+                    <div class="input-group">
+                        <label>Pausa lunga (minuti)</label>
+                        <input type="number" id="long-break" min="10" max="30" value="15">
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="btn-back-ritual" class="btn-secondary">← Modifica rituale</button>
+                <button id="btn-start-ritual" class="btn-primary">Inizia il rituale →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHERMATA 4: Esecuzione Rituale (Checklist) -->
+    <div id="screen-ritual-execution" class="screen">
+        <div class="container">
+            <h2>Completa il tuo rituale</h2>
+            <p class="subtitle">Spunta ogni azione prima di iniziare a lavorare</p>
+            
+            <div class="ritual-checklist" id="ritual-checklist"></div>
+
+            <div class="ritual-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="ritual-progress"></div>
+                </div>
+                <p id="ritual-progress-text">0 di 0 completate</p>
+            </div>
+
+            <button id="btn-start-timer" class="btn-primary btn-large" disabled>
+                🚀 Avvia il timer Pomodoro
+            </button>
+        </div>
+    </div>
+
+    <!-- SCHERMATA 5: Timer Pomodoro attivo -->
+    <div id="screen-timer" class="screen">
+        <div class="container">
+            <div class="identity-banner" id="identity-banner">
+                Sei una persona che si presenta al lavoro ogni giorno
+            </div>
+
+            <div class="timer-display">
+                <div class="timer-phase" id="timer-phase">Sessione di lavoro</div>
+                <div class="timer-countdown" id="timer-countdown">25:00</div>
+                <div class="timer-pomodoros">
+                    <span id="pomodoro-count">0</span> 🍅 completati oggi
+                </div>
+            </div>
+
+            <div class="timer-controls">
+                <button id="btn-pause" class="btn-secondary">⏸️ Pausa</button>
+                <button id="btn-resume" class="btn-secondary" style="display:none;">▶️ Riprendi</button>
+                <button id="btn-stop" class="btn-danger">⏹️ Interrompi</button>
+            </div>
+
+            <div class="current-task" id="current-task">
+                <p><strong>Task attuale:</strong> <span id="task-name">Lavoro in corso</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHERMATA 6: Fine Sessione / Recap -->
+    <div id="screen-recap" class="screen">
+        <div class="container">
+            <h2>🎉 Ottimo lavoro!</h2>
+            <div class="recap-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="recap-pomodoros">0</div>
+                    <div class="stat-label">Pomodori oggi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="recap-streak">0</div>
+                    <div class="stat-label">Giorni di fila</div>
+                </div>
+            </div>
+
+            <div class="recap-chart">
+                <h3>Ultimi 7 giorni</h3>
+                <div id="week-chart"></div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="btn-new-session" class="btn-primary btn-large">Inizia nuova sessione</button>
+                <button id="btn-reset-all" class="btn-danger">Reset completo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
